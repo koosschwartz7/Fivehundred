@@ -10,23 +10,33 @@ class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  
         for (turn in turns) {
             val turnCard: Card = turn.playedCard
             val turnSuit: Suit = turn.playedCard.suit
-            if (turn.equals(winningTurn) || turnSuit == Suit.NULLSUIT || (turnSuit != trumpSuit && turnSuit != packSuit)) {
-                continue
-            }
             if (turnSuit == Suit.JOKER) {
                 winningTurn = turn
                 break
             }
-            if (packSuit == turnSuit && turnCard.value > winningTurn.playedCard.value) {
+            if (turn == winningTurn || turnSuit == Suit.NULLSUIT || (!turnCard.isTrump(trumpSuit) && turnSuit != packSuit)) {
+                continue
+            }
+            if (turnCard.isTrump(trumpSuit) && !winningTurn.playedCard.isTrump(trumpSuit)) {
                 winningTurn = turn
                 continue
             }
-            if (turnSuit == trumpSuit && winningTurn.playedCard.suit != trumpSuit) {
+            if (winningTurn.playedCard.isTrump(trumpSuit) && turnCard.isTrump(trumpSuit)) {
+                if ((turnCard.value > winningTurn.playedCard.value || turnCard.value == 11) && winningTurn.playedCard.value != 11) {
+                    winningTurn = turn
+                    continue
+                } else if (winningTurn.playedCard.value == 11 && turnCard.value == 11 && turnCard.suit == trumpSuit) {
+                    winningTurn = turn
+                    continue
+                }
+            }
+            if (winningTurn.playedCard.suit != trumpSuit && packSuit == turnSuit && turnCard.value > winningTurn.playedCard.value) {
                 winningTurn = turn
                 continue
             }
-
         }
         return winningTurn
     }
+
+
 }
