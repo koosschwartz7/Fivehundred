@@ -1,7 +1,6 @@
 package za.co.kschwartz.fivehundreds.domain
 
 class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  {
-    var winningTeam: Int = 0;
     var turns = arrayOf<Turn>(Turn(player1), Turn(player2), Turn(player3), Turn(player4))
 
     fun determineWinningTurn(trumpSuit: Suit): Turn {
@@ -36,6 +35,17 @@ class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  
             }
         }
         return winningTurn
+    }
+
+    fun allTurnsPlayed(): Boolean {
+        var allTurnsPlayed: Boolean = true
+        for (t in turns) {
+            if (t.playedCard.suit == Suit.NULLSUIT) {
+                allTurnsPlayed = false
+                break
+            }
+        }
+        return allTurnsPlayed
     }
 
 

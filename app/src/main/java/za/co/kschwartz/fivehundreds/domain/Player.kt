@@ -7,8 +7,10 @@ class Player(name: String, team: Int, playerNr: Int) {
     var playerNr: Int = playerNr
 
     fun playCard(indexOfCard: Int): Card = hand.removeAt(indexOfCard)
-    fun call(suit: Suit, nrOfPacks: Int): Trump = Trump(suit, this, nrOfPacks)
+    fun call(suit: Suit, nrOfPacks: Int): Bet = Bet(suit, this, nrOfPacks)
     fun pass() {
         //TODO: Count passes perhaps?
     }
+
+
 }

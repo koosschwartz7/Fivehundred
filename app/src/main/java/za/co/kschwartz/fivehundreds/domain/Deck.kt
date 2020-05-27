@@ -6,7 +6,7 @@ abstract class Deck(size: Int) {
 
     fun isEmpty():Boolean = cards.isEmpty()
 
-    abstract fun dealRandomCard(): Card
+    abstract fun drawRandomCard(): Card
     abstract fun reset()
     abstract fun returnCard(card: Card)
 }

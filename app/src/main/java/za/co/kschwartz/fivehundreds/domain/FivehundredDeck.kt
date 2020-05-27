@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 class FivehundredDeck(size: Int) : Deck(size) {
 
-    override fun dealRandomCard(): Card {
+    override fun drawRandomCard(): Card {
         val index = Random.nextInt(cards.size)
         val randomCard = cards.get(index)
         cards.removeAt(index)
