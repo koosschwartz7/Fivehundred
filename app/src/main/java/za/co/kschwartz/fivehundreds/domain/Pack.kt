@@ -1,8 +1,16 @@
 package za.co.kschwartz.fivehundreds.domain
 
+/**
+ * A pack is the collection of the 4 turns played by the 4 players, for the total of 4 cards
+ */
 class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  {
     var turns = arrayOf<Turn>(Turn(player1), Turn(player2), Turn(player3), Turn(player4))
 
+    /**
+     * Determines the winning turn in this pack
+     * @param trumpSuit The Suit that's been called as trumps in this round.
+     * @return The Turn that wins the round by means of playing the highest card
+    */
     fun determineWinningTurn(trumpSuit: Suit): Turn {
         val packSuit: Suit = turns[0].playedCard.suit
         var winningTurn: Turn = turns[0]
@@ -37,6 +45,10 @@ class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  
         return winningTurn
     }
 
+    /**
+     * Determines if all players have played a turn.
+     * @return TRUE if all players have played their turn, else FALSE.
+     */
     fun allTurnsPlayed(): Boolean {
         var allTurnsPlayed: Boolean = true
         for (t in turns) {
