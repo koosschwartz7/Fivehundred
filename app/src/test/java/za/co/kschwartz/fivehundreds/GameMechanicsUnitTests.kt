@@ -113,4 +113,50 @@ class GameMechanicsUnitTests {
         Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0]))
     }
 
+    @Test
+    fun minimumFirstBetIsAlwaysSixPackOfSuit() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+
+        var minimumAllowedBetForSuit = round.getMinimumAllowedBetForSuit(Suit.SPADE, round.players[0]);
+        Assert.assertEquals(minimumAllowedBetForSuit.trumpSuit, Suit.SPADE)
+        Assert.assertEquals(minimumAllowedBetForSuit.nrPacks, 6)
+
+        minimumAllowedBetForSuit = round.getMinimumAllowedBetForSuit(Suit.CLUB, round.players[0]);
+        Assert.assertEquals(minimumAllowedBetForSuit.trumpSuit, Suit.CLUB)
+        Assert.assertEquals(minimumAllowedBetForSuit.nrPacks, 6)
+
+        minimumAllowedBetForSuit = round.getMinimumAllowedBetForSuit(Suit.DIAMOND, round.players[0]);
+        Assert.assertEquals(minimumAllowedBetForSuit.trumpSuit, Suit.DIAMOND)
+        Assert.assertEquals(minimumAllowedBetForSuit.nrPacks, 6)
+
+        minimumAllowedBetForSuit = round.getMinimumAllowedBetForSuit(Suit.HEART, round.players[0]);
+        Assert.assertEquals(minimumAllowedBetForSuit.trumpSuit, Suit.HEART)
+        Assert.assertEquals(minimumAllowedBetForSuit.nrPacks, 6)
+
+        minimumAllowedBetForSuit = round.getMinimumAllowedBetForSuit(Suit.JOKER, round.players[0]);
+        Assert.assertEquals(minimumAllowedBetForSuit.trumpSuit, Suit.JOKER)
+        Assert.assertEquals(minimumAllowedBetForSuit.nrPacks, 6)
+    }
+
+    @Test
+    fun slammingBetCannotBeSupersededByLowerOrSameSuit() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        val bet:Bet = Bet(Suit.CLUB, round.players[0], 10)
+        round.placeBet(bet)
+
+        round.getMinimumAllowedBetForSuit(Suit.DIAMOND, round.players[0]) //Allowed
+        try {
+            round.getMinimumAllowedBetForSuit(Suit.SPADE, round.players[0]) //No possible bet for SPADES, throws SuitBetNotAllowedException
+        } catch (e: SuitBetNotAllowedException) {
+            Assert.assertEquals(e.message, "Suit Spades has no possible bet that's greater than 10 of Clubs")
+            return
+        }
+        Assert.fail("Betting any number of spades against 10 of CLUBS should not be allowed, but it is.")
+    }
+
+    @Test
+    fun getMinimumBetForSuitAlwaysReturnsValidBet() {
+        //TODO: Write test
+    }
+
 }
