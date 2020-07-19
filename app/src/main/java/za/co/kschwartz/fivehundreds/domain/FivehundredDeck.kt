@@ -2,7 +2,7 @@ package za.co.kschwartz.fivehundreds.domain
 
 import kotlin.random.Random
 
-class FivehundredDeck(size: Int) : Deck(size) {
+class FivehundredDeck() : Deck(43) {
 
     override fun drawRandomCard(): Card {
         val index = Random.nextInt(cards.size)

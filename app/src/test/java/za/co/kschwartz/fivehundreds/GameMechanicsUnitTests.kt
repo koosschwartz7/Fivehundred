@@ -219,7 +219,36 @@ class GameMechanicsUnitTests {
         //May not bet a pack value larger than 10
         Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 10)))
         Assert.assertFalse(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 11)))
-
     }
+
+    @Test
+    fun dealHandDealsTenCardsToEachPlayer() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        val deck = FivehundredDeck();
+        deck.reset()
+        round.dealHand(deck)
+
+        //All players have 10 cards in hand
+        for (player in round.players) {
+            Assert.assertEquals(10, player.hand.size)
+        }
+
+        //Deck has 3 cards left as "kitty"
+        Assert.assertEquals(3, deck.cards.size)
+
+        //No player has the same card as another player
+        for (pIndex in 0..2) {
+            val player = round.players[pIndex]
+            for (card in player.hand) {
+                for (otherPIndex in (pIndex + 1)..3) {
+                    val otherPlayer = round.players[otherPIndex]
+                    for (otherPCard in otherPlayer.hand) {
+                        Assert.assertFalse(card.suit == otherPCard.suit && card.value == otherPCard.value)
+                    }
+                }
+            }
+        }
+    }
+
 
 }

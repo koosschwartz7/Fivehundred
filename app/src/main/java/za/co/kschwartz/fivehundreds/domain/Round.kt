@@ -34,7 +34,6 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
         return false
     }
 
-    //TODO: Test
     fun mayPlaceBet(possibleBet: Bet):Boolean {
         return possibleBet.nrPacks >= getMinimumAllowedBetForSuit(possibleBet.trumpSuit, possibleBet.callingPlayer).nrPacks
                 && possibleBet.nrPacks <= 10
