@@ -264,5 +264,117 @@ class GameMechanicsUnitTests {
         assertTrue(pack.allTurnsPlayed())
     }
 
+    @Test
+    fun roundScoreCalculatesCorrectly() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[0]))
 
+        //Team one wins bet of 6-Diamonds with 6 packs
+        playWinningPackForTeam(round, 0, 1)
+        playWinningPackForTeam(round, 1, 1)
+        playWinningPackForTeam(round, 2, 1)
+        playWinningPackForTeam(round, 3, 1)
+        playWinningPackForTeam(round, 4, 1)
+        playWinningPackForTeam(round, 5, 1)
+        playWinningPackForTeam(round, 6, 2)
+        playWinningPackForTeam(round, 7, 2)
+        playWinningPackForTeam(round, 8, 2)
+        playWinningPackForTeam(round, 9, 2)
+        assertEquals(80, round.getTotalScoreForTeam(1))
+        assertEquals(40, round.getTotalScoreForTeam(2))
+
+        //Team one wins bet of 7-Diamonds with 7 packs
+        round = Round(za.co.kschwartz.fivehundreds.domain.Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[0], 7))
+        playWinningPackForTeam(round, 0, 1)
+        playWinningPackForTeam(round, 1, 1)
+        playWinningPackForTeam(round, 2, 1)
+        playWinningPackForTeam(round, 3, 1)
+        playWinningPackForTeam(round, 4, 1)
+        playWinningPackForTeam(round, 5, 1)
+        playWinningPackForTeam(round, 6, 1)
+        playWinningPackForTeam(round, 7, 2)
+        playWinningPackForTeam(round, 8, 2)
+        playWinningPackForTeam(round, 9, 2)
+        assertEquals(130, round.getTotalScoreForTeam(1))
+        assertEquals(30, round.getTotalScoreForTeam(2))
+
+        //Team one wins bet of 7-Diamonds with 8 packs
+        round = Round(za.co.kschwartz.fivehundreds.domain.Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[0], 7))
+        playWinningPackForTeam(round, 0, 1)
+        playWinningPackForTeam(round, 1, 1)
+        playWinningPackForTeam(round, 2, 1)
+        playWinningPackForTeam(round, 3, 1)
+        playWinningPackForTeam(round, 4, 1)
+        playWinningPackForTeam(round, 5, 1)
+        playWinningPackForTeam(round, 6, 1)
+        playWinningPackForTeam(round, 7, 1)
+        playWinningPackForTeam(round, 8, 2)
+        playWinningPackForTeam(round, 9, 2)
+        assertEquals(140, round.getTotalScoreForTeam(1))
+        assertEquals(20, round.getTotalScoreForTeam(2))
+
+        //Team one loses bet of 7-Diamonds with 2 packs
+        round = Round(za.co.kschwartz.fivehundreds.domain.Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[0], 7))
+        playWinningPackForTeam(round, 0, 2)
+        playWinningPackForTeam(round, 1, 2)
+        playWinningPackForTeam(round, 2, 2)
+        playWinningPackForTeam(round, 3, 2)
+        playWinningPackForTeam(round, 4, 2)
+        playWinningPackForTeam(round, 5, 2)
+        playWinningPackForTeam(round, 6, 2)
+        playWinningPackForTeam(round, 7, 2)
+        playWinningPackForTeam(round, 8, 1)
+        playWinningPackForTeam(round, 9, 1)
+        assertEquals(0, round.getTotalScoreForTeam(1))
+        assertEquals(210, round.getTotalScoreForTeam(2))
+
+        //Team 2 slams
+        round = Round(za.co.kschwartz.fivehundreds.domain.Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[0], 7))
+        playWinningPackForTeam(round, 0, 2)
+        playWinningPackForTeam(round, 1, 2)
+        playWinningPackForTeam(round, 2, 2)
+        playWinningPackForTeam(round, 3, 2)
+        playWinningPackForTeam(round, 4, 2)
+        playWinningPackForTeam(round, 5, 2)
+        playWinningPackForTeam(round, 6, 2)
+        playWinningPackForTeam(round, 7, 2)
+        playWinningPackForTeam(round, 8, 2)
+        playWinningPackForTeam(round, 9, 2)
+        assertEquals(0, round.getTotalScoreForTeam(1))
+        assertEquals(250, round.getTotalScoreForTeam(2))
+
+        //Team one loses bet of 8-No Trumps with 2 packs
+        round = Round(za.co.kschwartz.fivehundreds.domain.Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.JOKER, round.players[0], 8))
+        playWinningPackForTeam(round, 0, 2)
+        playWinningPackForTeam(round, 1, 2)
+        playWinningPackForTeam(round, 2, 2)
+        playWinningPackForTeam(round, 3, 2)
+        playWinningPackForTeam(round, 4, 2)
+        playWinningPackForTeam(round, 5, 2)
+        playWinningPackForTeam(round, 6, 2)
+        playWinningPackForTeam(round, 7, 2)
+        playWinningPackForTeam(round, 8, 1)
+        playWinningPackForTeam(round, 9, 1)
+        assertEquals(0, round.getTotalScoreForTeam(1))
+        assertEquals(300, round.getTotalScoreForTeam(2))
+
+    }
+
+    fun playWinningPackForTeam(round: Round, packIndex: Int, teamNr: Int) {
+        val firstTurn = round.packs[packIndex].getNextPlayableTurn()
+        if (firstTurn.player.team == teamNr) {
+            firstTurn.playedCard = Card(Suit.SPADE, 14)
+            round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 8)
+        } else {
+            firstTurn.playedCard = Card(Suit.SPADE, 8)
+            round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
+        }
+        round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
+        round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 7)
+    }
 }

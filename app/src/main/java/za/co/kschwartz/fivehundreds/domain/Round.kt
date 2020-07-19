@@ -61,4 +61,37 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
         return minimumBet
     }
 
+    fun getTotalScoreForTeam(teamNr: Int): Int {
+        var total:Int = 0
+        for (score in getScoreBreakdownForTeam(teamNr).values) {
+            total += score
+        }
+        return total
+    }
+
+    fun getScoreBreakdownForTeam(teamNr: Int): Map<String, Int> {
+        val packsTaken: Int = getNrOfPacksTakenForTeam(teamNr)
+        var breakdown = mutableMapOf<String, Int>()
+        val betScoreValue = bet.trumpSuit.trumpWeight + ((bet.nrPacks-6) * 50)
+
+        if (packsTaken == 10) {
+            breakdown["Slam!"] = 250
+            return breakdown
+        }
+
+        if (bet.nrPacks > packsTaken && teamNr == bet.callingPlayer.team) {//Betting team, bet failed
+            breakdown["Bet failed!"] = 0
+        } else if ((10 - packsTaken) < bet.nrPacks  && teamNr != bet.callingPlayer.team) {//Opposite team's bet failed
+            breakdown["Other team went under!"] = betScoreValue
+            breakdown["Extra packs (x$packsTaken)"] = (packsTaken*10)
+        } else if (bet.nrPacks <= packsTaken && teamNr == bet.callingPlayer.team) {//Betting team, bet success
+            val bonusPacks = (packsTaken - bet.nrPacks)
+            breakdown[bet.nrPacks.toString() + " of " + bet.getTrumpTitle()] = betScoreValue
+            breakdown["Extra packs (x$bonusPacks)"] = (bonusPacks * 10)
+        } else {//Opposite team's bet was success
+            breakdown["Packs taken (x$packsTaken)"] = (packsTaken*10)
+        }
+        return breakdown
+    }
+
 }
