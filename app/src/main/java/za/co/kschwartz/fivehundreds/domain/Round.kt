@@ -50,11 +50,11 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
             throw SuitBetNotAllowedException("Suit "+suit.title+" has no possible bet that's greater than 10 of "+bet.trumpSuit.title)
         }
 
-        if (bet.trumpSuit.trumpWeight <= suit.trumpWeight) {
+        if (suit.trumpWeight <= bet.trumpSuit.trumpWeight) {
            minimumBet.nrPacks = bet.nrPacks+1
         }
 
-        return bet
+        return minimumBet
     }
 
 }

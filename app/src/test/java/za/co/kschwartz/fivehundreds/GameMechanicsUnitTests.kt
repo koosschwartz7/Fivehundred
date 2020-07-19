@@ -156,7 +156,33 @@ class GameMechanicsUnitTests {
 
     @Test
     fun getMinimumBetForSuitAlwaysReturnsValidBet() {
-        //TODO: Write test
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        //When no bets have been placed yet, lowest possible bet (6 pack) is generated
+        var bet = round.getMinimumAllowedBetForSuit(Suit.SPADE, round.players[0])
+        Assert.assertEquals(Suit.SPADE, bet.trumpSuit)
+        Assert.assertEquals(6, bet.nrPacks)
+        bet = round.getMinimumAllowedBetForSuit(Suit.DIAMOND, round.players[0])
+        Assert.assertEquals(Suit.DIAMOND, bet.trumpSuit)
+        Assert.assertEquals(6, bet.nrPacks)
+
+        round.placeBet(Bet(Suit.DIAMOND,round.players[0]))
+
+        //When a bet has been placed, placing a bet for a weaker/lighter Suit or the same suit must be one pack more.
+        bet = round.getMinimumAllowedBetForSuit(Suit.CLUB, round.players[0])
+        Assert.assertEquals(Suit.CLUB, bet.trumpSuit)
+        Assert.assertEquals(7, bet.nrPacks)
+        bet = round.getMinimumAllowedBetForSuit(Suit.DIAMOND, round.players[0])
+        Assert.assertEquals(Suit.DIAMOND, bet.trumpSuit)
+        Assert.assertEquals(7, bet.nrPacks)
+
+        //When a bet has been placed, you can bet a stronger/heavier Suit with same pack value
+        bet = round.getMinimumAllowedBetForSuit(Suit.HEART, round.players[0])
+        Assert.assertEquals(Suit.HEART, bet.trumpSuit)
+        Assert.assertEquals(6, bet.nrPacks)
+        bet = round.getMinimumAllowedBetForSuit(Suit.JOKER, round.players[0])
+        Assert.assertEquals(Suit.JOKER, bet.trumpSuit)
+        Assert.assertEquals(6, bet.nrPacks)
+
     }
 
 }
