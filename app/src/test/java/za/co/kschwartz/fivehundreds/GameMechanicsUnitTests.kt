@@ -20,19 +20,19 @@ class GameMechanicsUnitTests {
         pack.turns[1].playedCard = Card(Suit.HEART, 4) //Piet trumps with 4 of hearts
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 4) //San plays 4 of diamonds
         pack.turns[3].playedCard = Card(Suit.JOKER, 15) //Juan plays Joker
-        Assert.assertTrue(pack.determineWinningTurn(Suit.HEART).equals(pack.turns[3])) //Joker always wins
+        assertTrue(pack.determineWinningTurn(Suit.HEART).equals(pack.turns[3])) //Joker always wins
 
         pack.turns[0].playedCard = Card(Suit.DIAMOND, 14)
         pack.turns[1].playedCard = Card(Suit.HEART, 4)
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 4)
         pack.turns[3].playedCard = Card(Suit.JOKER, 15)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.DIAMOND).equals(pack.turns[3])) //Joker always wins
+        assertTrue(pack.determineWinningTurn(Suit.DIAMOND).equals(pack.turns[3])) //Joker always wins
 
         pack.turns[0].playedCard = Card(Suit.JOKER, 15)
         pack.turns[1].playedCard = Card(Suit.HEART, 4)
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 4)
         pack.turns[3].playedCard = Card(Suit.HEART, 15)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.HEART).equals(pack.turns[0])) //Joker always wins
+        assertTrue(pack.determineWinningTurn(Suit.HEART).equals(pack.turns[0])) //Joker always wins
     }
 
     @Test
@@ -42,19 +42,19 @@ class GameMechanicsUnitTests {
         pack.turns[1].playedCard = Card(Suit.DIAMOND, 4) //Piet plays 4 of diamonds
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13) //San plays King of diamonds
         pack.turns[3].playedCard = Card(Suit.DIAMOND, 11) //Juan plays Jack of diamonds
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0])) //Ace is highest
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0])) //Ace is highest
 
         pack.turns[0].playedCard = Card(Suit.DIAMOND, 4) //Jan plays 4 of diamonds
         pack.turns[1].playedCard = Card(Suit.DIAMOND, 12) //Piet plays Queen of diamonds
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13) //San plays King of diamonds
         pack.turns[3].playedCard = Card(Suit.DIAMOND, 11) //Juan plays Jack of diamonds
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[2])) //King is highest
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[2])) //King is highest
 
         pack.turns[0].playedCard = Card(Suit.HEART, 4) //Jan plays 4 of diamonds
         pack.turns[1].playedCard = Card(Suit.DIAMOND, 12) //Piet plays Queen of diamonds
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13) //San plays King of diamonds
         pack.turns[3].playedCard = Card(Suit.DIAMOND, 11) //Juan plays Jack of diamonds
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0])) //4 of hearts is highest
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0])) //4 of hearts is highest
     }
 
     @Test
@@ -64,37 +64,37 @@ class GameMechanicsUnitTests {
         pack.turns[1].playedCard = Card(Suit.SPADE, 5) //Piet plays 4 of spades
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13) //San plays King of diamonds
         pack.turns[3].playedCard = Card(Suit.DIAMOND, 11) //Juan plays Jack of diamonds
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[1])) //5 of spades is highest
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[1])) //5 of spades is highest
 
         pack.turns[0].playedCard = Card(Suit.SPADE, 14)
         pack.turns[1].playedCard = Card(Suit.SPADE, 5)
         pack.turns[2].playedCard = Card(Suit.SPADE, 13)
         pack.turns[3].playedCard = Card(Suit.SPADE, 11)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
 
         pack.turns[0].playedCard = Card(Suit.SPADE, 14)
         pack.turns[1].playedCard = Card(Suit.SPADE, 5)
         pack.turns[2].playedCard = Card(Suit.SPADE, 13)
         pack.turns[3].playedCard = Card(Suit.CLUB, 11)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
 
         pack.turns[0].playedCard = Card(Suit.SPADE, 14)
         pack.turns[1].playedCard = Card(Suit.SPADE, 5)
         pack.turns[2].playedCard = Card(Suit.CLUB, 13)
         pack.turns[3].playedCard = Card(Suit.SPADE, 11)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
 
         pack.turns[0].playedCard = Card(Suit.SPADE, 14)
         pack.turns[1].playedCard = Card(Suit.CLUB, 11)
         pack.turns[2].playedCard = Card(Suit.SPADE, 11)
         pack.turns[3].playedCard = Card(Suit.JOKER, 15)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
 
         pack.turns[0].playedCard = Card(Suit.CLUB, 14)
         pack.turns[1].playedCard = Card(Suit.CLUB, 5)
         pack.turns[2].playedCard = Card(Suit.SPADE, 13)
         pack.turns[3].playedCard = Card(Suit.CLUB, 11)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[3]))
     }
 
     @Test
@@ -104,13 +104,13 @@ class GameMechanicsUnitTests {
         pack.turns[1].playedCard = Card(Suit.SPADE, 5) //Piet plays 4 of spades
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13) //San plays King of diamonds
         pack.turns[3].playedCard = Card(Suit.DIAMOND, 11) //Juan plays Jack of diamonds
-        Assert.assertTrue(pack.determineWinningTurn(Suit.JOKER).equals(pack.turns[0]))
+        assertTrue(pack.determineWinningTurn(Suit.JOKER).equals(pack.turns[0]))
 
         pack.turns[0].playedCard = Card(Suit.SPADE, 5)
         pack.turns[1].playedCard = Card(Suit.CLUB, 6)
         pack.turns[2].playedCard = Card(Suit.DIAMOND, 13)
         pack.turns[3].playedCard = Card(Suit.HEART, 11)
-        Assert.assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0]))
+        assertTrue(pack.determineWinningTurn(Suit.SPADE).equals(pack.turns[0]))
     }
 
     @Test
@@ -201,28 +201,28 @@ class GameMechanicsUnitTests {
         var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
         val aPlayer =  round.players[0]
         //When no bets have been placed yet, any bet is accepted.
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 6)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 6)))
 
         //Suit weight holds for betting
         round.placeBet(Bet(Suit.DIAMOND, aPlayer, 6))
         Assert.assertFalse(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 6)))
         Assert.assertFalse(round.mayPlaceBet(Bet(Suit.CLUB, aPlayer, 6)))
         Assert.assertFalse(round.mayPlaceBet(Bet(Suit.DIAMOND, aPlayer, 6)))
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.HEART, aPlayer, 6)))
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.JOKER, aPlayer, 6)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.HEART, aPlayer, 6)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.JOKER, aPlayer, 6)))
 
         //Betting bigger pack value for lighter Suit is accepted
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 7)))
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.CLUB, aPlayer, 7)))
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.DIAMOND, aPlayer, 7)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 7)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.CLUB, aPlayer, 7)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.DIAMOND, aPlayer, 7)))
 
         //May not bet a pack value larger than 10
-        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 10)))
+        assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 10)))
         Assert.assertFalse(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 11)))
     }
 
     @Test
-    fun dealHandDealsTenCardsToEachPlayer() {
+    fun dealHandDealsTenUniqueCardsToEachPlayer() {
         var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
         val deck = FivehundredDeck();
         deck.reset()
@@ -230,11 +230,11 @@ class GameMechanicsUnitTests {
 
         //All players have 10 cards in hand
         for (player in round.players) {
-            Assert.assertEquals(10, player.hand.size)
+            assertEquals(10, player.hand.size)
         }
 
         //Deck has 3 cards left as "kitty"
-        Assert.assertEquals(3, deck.cards.size)
+        assertEquals(3, deck.cards.size)
 
         //No player has the same card as another player
         for (pIndex in 0..2) {
@@ -243,11 +243,25 @@ class GameMechanicsUnitTests {
                 for (otherPIndex in (pIndex + 1)..3) {
                     val otherPlayer = round.players[otherPIndex]
                     for (otherPCard in otherPlayer.hand) {
-                        Assert.assertFalse(card.suit == otherPCard.suit && card.value == otherPCard.value)
+                        assertFalse(card.suit == otherPCard.suit && card.value == otherPCard.value)
                     }
                 }
             }
         }
+    }
+
+    @Test
+    fun allTurnsPlayedCorrectlyChecksAllPlayersPlayed() {
+        var pack = Pack(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4))
+        assertFalse(pack.allTurnsPlayed())
+        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 10)
+        assertFalse(pack.allTurnsPlayed())
+        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 11)
+        assertFalse(pack.allTurnsPlayed())
+        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 12)
+        assertFalse(pack.allTurnsPlayed())
+        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 13)
+        assertTrue(pack.allTurnsPlayed())
     }
 
 

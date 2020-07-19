@@ -60,5 +60,14 @@ class Pack(player1: Player, player2: Player, player3: Player, player4: Player)  
         return allTurnsPlayed
     }
 
+    fun getNextPlayableTurn(): Turn {
+        for (t in turns) {
+            if (t.playedCard.suit == Suit.NULLSUIT) {
+                return t
+            }
+        }
+        throw NoNextTurnException("All turns in this pack have been played.");
+    }
+
 
 }
