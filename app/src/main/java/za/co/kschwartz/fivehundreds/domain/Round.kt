@@ -37,10 +37,15 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
     //TODO: Test
     fun mayPlaceBet(possibleBet: Bet):Boolean {
         return possibleBet.nrPacks >= getMinimumAllowedBetForSuit(possibleBet.trumpSuit, possibleBet.callingPlayer).nrPacks
+                && possibleBet.nrPacks <= 10
     }
 
     fun getMinimumAllowedBetForSuit(suit: Suit, callingPlayer: Player): Bet {
         val minimumBet: Bet = Bet(suit, callingPlayer)
+
+        if (suit.equals(Suit.NULLSUIT)) {
+            throw SuitBetNotAllowedException(Suit.NULLSUIT.title + " is not allowed as a bet!")
+        }
 
         if (bet.trumpSuit.equals(Suit.NULLSUIT)) {
             return minimumBet

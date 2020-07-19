@@ -148,7 +148,7 @@ class GameMechanicsUnitTests {
         try {
             round.getMinimumAllowedBetForSuit(Suit.SPADE, round.players[0]) //No possible bet for SPADES, throws SuitBetNotAllowedException
         } catch (e: SuitBetNotAllowedException) {
-            Assert.assertEquals(e.message, "Suit Spades has no possible bet that's greater than 10 of Clubs")
+            Assert.assertEquals("Suit Spades has no possible bet that's greater than 10 of Clubs", e.message)
             return
         }
         Assert.fail("Betting any number of spades against 10 of CLUBS should not be allowed, but it is.")
@@ -182,6 +182,43 @@ class GameMechanicsUnitTests {
         bet = round.getMinimumAllowedBetForSuit(Suit.JOKER, round.players[0])
         Assert.assertEquals(Suit.JOKER, bet.trumpSuit)
         Assert.assertEquals(6, bet.nrPacks)
+    }
+
+    @Test
+    fun getMinimumBetForSuitDoesNotAcceptNullSuit() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        try {
+            round.getMinimumAllowedBetForSuit(Suit.NULLSUIT, round.players[0])
+        } catch (e: SuitBetNotAllowedException) {
+            Assert.assertEquals("NoSuit is not allowed as a bet!", e.message)
+            return
+        }
+        Assert.fail("Betting any number of spades against 10 of CLUBS should not be allowed, but it is.")
+    }
+
+    @Test
+    fun mayPlaceBetCorrectlyValidatesPotentialBet() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        val aPlayer =  round.players[0]
+        //When no bets have been placed yet, any bet is accepted.
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 6)))
+
+        //Suit weight holds for betting
+        round.placeBet(Bet(Suit.DIAMOND, aPlayer, 6))
+        Assert.assertFalse(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 6)))
+        Assert.assertFalse(round.mayPlaceBet(Bet(Suit.CLUB, aPlayer, 6)))
+        Assert.assertFalse(round.mayPlaceBet(Bet(Suit.DIAMOND, aPlayer, 6)))
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.HEART, aPlayer, 6)))
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.JOKER, aPlayer, 6)))
+
+        //Betting bigger pack value for lighter Suit is accepted
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 7)))
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.CLUB, aPlayer, 7)))
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.DIAMOND, aPlayer, 7)))
+
+        //May not bet a pack value larger than 10
+        Assert.assertTrue(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 10)))
+        Assert.assertFalse(round.mayPlaceBet(Bet(Suit.SPADE, aPlayer, 11)))
 
     }
 
