@@ -377,4 +377,16 @@ class GameMechanicsUnitTests {
         round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
         round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 7)
     }
+
+    @Test
+    fun bettingOrderIncrementsCorrectly() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[1]))
+        assertEquals("Piet", round.getNextBettingPlayer().name)
+        assertEquals("San", round.getNextBettingPlayer().name)
+        assertEquals("Juan", round.getNextBettingPlayer().name)
+        assertEquals("Jan", round.getNextBettingPlayer().name)
+        assertEquals("Piet", round.getNextBettingPlayer().name)
+    }
+
 }

@@ -1,11 +1,10 @@
 package za.co.kschwartz.fivehundreds.domain
 
-class Round(player1: Player, player2: Player, player3: Player, player4: Player, roundNr: Int, startingBettingPlayerIndex: Int) {
+class Round(player1: Player, player2: Player, player3: Player, player4: Player, roundNr: Int, var nextBettingPlayerIndex: Int) {
     val players = arrayOf<Player>(player1, player2, player3, player4)
     val roundNr: Int = roundNr
     var packs = Array<Pack>(10){Pack(player1, player2, player3, player4)}
-    var bet:Bet = Bet(Suit.NULLSUIT, players[startingBettingPlayerIndex], 99)
-    var nextPlayer:Int = 0
+    var bet:Bet = Bet(Suit.NULLSUIT, players[nextBettingPlayerIndex], 99)
 
     fun dealHand(deck: Deck) {
         for (p in players) {
@@ -59,6 +58,54 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
         }
 
         return minimumBet
+    }
+
+    fun getNextBettingPlayer():Player {
+        val nextBettingPlayer:Player = players[nextBettingPlayerIndex]
+        nextBettingPlayerIndex++
+        if (nextBettingPlayerIndex >= 4) {
+            nextBettingPlayerIndex = 0
+        }
+        return nextBettingPlayer
+    }
+
+    //TODO: Test
+    fun generateNextPackPlayOrder() {
+        val nextPlayablePackIndex = getNextPlayablePackIndex()
+        if (nextPlayablePackIndex > -1) {
+            val nextPack = packs[nextPlayablePackIndex]
+            var playerIndex = getNextPackFirstPlayerIndex()
+
+            for (turn in nextPack.turns) {
+                turn.player = players[playerIndex]
+                playerIndex = incrementPlayerIndex(playerIndex)
+            }
+
+        }
+    }
+
+    private fun incrementPlayerIndex(playerIndex: Int):Int {
+        if (playerIndex == 3) {
+            return 0
+        }
+        return playerIndex + 1
+    }
+
+    fun getNextPlayablePackIndex():Int {
+        for (i in packs.indices) {
+            if (!packs[i].allTurnsPlayed()) {
+                return i
+            }
+        }
+        return -1
+    }
+
+    fun getNextPackFirstPlayerIndex():Int {
+        val lastPlayedPackIndex = getNextPlayablePackIndex() -1
+        if (lastPlayedPackIndex > -1) {
+            return players.indexOf(packs[lastPlayedPackIndex].determineWinningTurn(bet.trumpSuit).player)
+        }
+        return players.indexOf(bet.callingPlayer);
     }
 
     fun getTotalScoreForTeam(teamNr: Int): Int {
