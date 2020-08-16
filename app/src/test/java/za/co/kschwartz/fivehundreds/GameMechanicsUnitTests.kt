@@ -389,4 +389,34 @@ class GameMechanicsUnitTests {
         assertEquals("Piet", round.getNextBettingPlayer().name)
     }
 
+    @Test
+    fun nextPackPlayOrderGeneratesCorrectly() {
+        var round: Round = Round(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4), 1,1)
+        round.placeBet(Bet(Suit.DIAMOND, round.players[1]))
+
+        //Betting player is first player in a round.
+        round.generateNextPackPlayOrder()
+        var nextPlayablePack = round.packs[round.getNextPlayablePackIndex()]
+        assertEquals("Piet",nextPlayablePack.getNextPlayableTurn().player.name)
+        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
+        assertEquals("San",nextPlayablePack.getNextPlayableTurn().player.name)
+        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 5)
+        assertEquals("Juan",nextPlayablePack.getNextPlayableTurn().player.name)
+        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
+        assertEquals("Jan",nextPlayablePack.getNextPlayableTurn().player.name)
+        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.DIAMOND, 6)
+
+        try {
+            nextPlayablePack.getNextPlayableTurn()
+            assertTrue("This should throw an exception when all players have played.", false)
+        } catch (e: NoNextTurnException) {
+            assertEquals("All turns in this pack have been played.", e.message)
+        }
+
+        //Winning player starts next pack
+        round.generateNextPackPlayOrder();
+        nextPlayablePack = round.packs[round.getNextPlayablePackIndex()]
+        assertEquals("Jan",nextPlayablePack.getNextPlayableTurn().player.name)
+    }
+
 }
