@@ -447,6 +447,8 @@ class GameMechanicsUnitTests {
 
             //Random player places a random bet
             round.placeBet(Bet(randomSuite(), bettingPlayer, randInt(6, 8)))
+            println("\n------------")
+            println("Round "+match.rounds.size + " BET: Team "+bettingPlayer.team+" Bets "+round.bet.nrPacks + " of " + round.bet.getTrumpTitle())
             //Randomly swap out cards from the kitty
             for (i in 0..randInt(0, 2)) {
                 bettingPlayer.hand[randInt(0, 9)] = deck.drawRandomCard()
@@ -461,15 +463,21 @@ class GameMechanicsUnitTests {
                     nextPlayableTurn.playedCard = playCard
                 }
             }
-
-            match.teams[1]!!.score += round.getTotalScoreForTeam(1)
-            match.teams[2]!!.score += round.getTotalScoreForTeam(2)
+            for (i in 1..2) {
+                println("   Team $i score: "+ round.getTotalScoreForTeam(i))
+                for (desc in round.getScoreBreakdownForTeam(i)) {
+                    println("       "+desc.key+" : "+desc.value)
+                }
+                match.teams[i]!!.score += round.getTotalScoreForTeam(i)
+                println("   Match Score: "+match.teams[i]!!.score)
+            }
         } while (match.teams[1]!!.score < 500 && match.teams[1]!!.score < 500)
 
         var winningTeam = match.teams[1]!!
         if (winningTeam.score < match.teams[2]!!.score) {
             winningTeam = match.teams[2]!!
         }
+        println("<<<<<DONE>>>>>>")
         println("Winning Team: "+winningTeam.teamNr+" with score "+winningTeam.score)
     }
 

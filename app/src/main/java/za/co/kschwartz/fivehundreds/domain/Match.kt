@@ -28,7 +28,7 @@ class Match {
 
         var round: Round = Round(teams[1]!!.players[1]!!,
             teams[2]!!.players[1]!!, teams[1]!!.players[2]!!, teams[2]!!.players[2]!!, rounds.size, getInitialBettingPlayerIndex())
-
+        rounds.add(round)
         return round;
     }
 
