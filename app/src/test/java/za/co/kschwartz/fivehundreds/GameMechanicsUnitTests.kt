@@ -1,10 +1,11 @@
 package za.co.kschwartz.fivehundreds
 
 import org.junit.Assert
-import org.junit.Test
-
 import org.junit.Assert.*
+import org.junit.Test
 import za.co.kschwartz.fivehundreds.domain.*
+import java.util.*
+import kotlin.random.Random
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -417,6 +418,76 @@ class GameMechanicsUnitTests {
         round.generateNextPackPlayOrder();
         nextPlayablePack = round.packs[round.getNextPlayablePackIndex()]
         assertEquals("Jan",nextPlayablePack.getNextPlayableTurn().player.name)
+    }
+
+    @Test
+    fun playRandomGame() {
+        var match:Match = Match();
+
+        var p1:Player = Player("Player 1", 1, 1)
+        var p2:Player = Player("Player 2", 1, 2)
+        var p3:Player = Player("Player 3", 2, 3)
+        var p4:Player = Player("Player 4", 2, 4)
+
+        match.joinPlayer(p1, 1)
+        match.joinPlayer(p2, 1)
+        match.joinPlayer(p3, 2)
+        match.joinPlayer(p4, 2)
+
+        val deck = FivehundredDeck()
+        do {
+            deck.reset()
+            p1.hand.clear()
+            p2.hand.clear()
+            p3.hand.clear()
+            p4.hand.clear()
+            val round = match.playNewRound()
+            round.dealHand(deck)
+            var bettingPlayer = round.players[randInt(0, 3)]
+
+            //Random player places a random bet
+            round.placeBet(Bet(randomSuite(), bettingPlayer, randInt(6, 8)))
+            //Randomly swap out cards from the kitty
+            for (i in 0..randInt(0, 2)) {
+                bettingPlayer.hand[randInt(0, 9)] = deck.drawRandomCard()
+            }
+
+            for (i in 0..9) {
+                round.generateNextPackPlayOrder()
+                for (k in 0..3) {
+                    val nextPlayableTurn = round.packs[i].getNextPlayableTurn()
+                    //Totally random, not checked for legality
+                    val playCard = nextPlayableTurn.player.playCard(randInt(0, nextPlayableTurn.player.hand.size-1))
+                    nextPlayableTurn.playedCard = playCard
+                }
+            }
+
+            match.teams[1]!!.score += round.getTotalScoreForTeam(1)
+            match.teams[2]!!.score += round.getTotalScoreForTeam(2)
+        } while (match.teams[1]!!.score < 500 && match.teams[1]!!.score < 500)
+
+        var winningTeam = match.teams[1]!!
+        if (winningTeam.score < match.teams[2]!!.score) {
+            winningTeam = match.teams[2]!!
+        }
+        println("Winning Team: "+winningTeam.teamNr+" with score "+winningTeam.score)
+    }
+
+    val rand = Random(System.nanoTime())
+    fun randInt(start: Int, end: Int): Int {
+        require(start <= end) { "Illegal Argument" }
+        return (start..end).random(rand)
+    }
+
+    fun randomSuite():Suit {
+        var retSuit: Suit
+        val VALUES: MutableList<Array<Suit>> =
+            Collections.unmodifiableList(Arrays.asList(Suit.values()))
+        do {
+            retSuit = VALUES[0][randInt(0, 5)]
+        } while (retSuit == Suit.NULLSUIT)
+
+        return retSuit
     }
 
 }

@@ -5,6 +5,7 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
     val roundNr: Int = roundNr
     var packs = Array<Pack>(10){Pack(player1, player2, player3, player4)}
     var bet:Bet = Bet(Suit.NULLSUIT, players[nextBettingPlayerIndex], 99)
+    var initialBettingPlayerIndex:Int = nextBettingPlayerIndex;
 
     fun dealHand(deck: Deck) {
         for (p in players) {
@@ -60,16 +61,20 @@ class Round(player1: Player, player2: Player, player3: Player, player4: Player, 
         return minimumBet
     }
 
-    fun getNextBettingPlayer():Player {
-        val nextBettingPlayer:Player = players[nextBettingPlayerIndex]
+    fun incrementNextBettingPlayerIndex():Int {
         nextBettingPlayerIndex++
         if (nextBettingPlayerIndex >= 4) {
             nextBettingPlayerIndex = 0
         }
+        return  nextBettingPlayerIndex;
+    }
+
+    fun getNextBettingPlayer():Player {
+        val nextBettingPlayer:Player = players[nextBettingPlayerIndex]
+        incrementNextBettingPlayerIndex();
         return nextBettingPlayer
     }
 
-    //TODO: Test
     fun generateNextPackPlayOrder() {
         val nextPlayablePackIndex = getNextPlayablePackIndex()
         if (nextPlayablePackIndex > -1) {
