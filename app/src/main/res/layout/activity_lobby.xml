@@ -112,11 +112,19 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tap on a Slot to switch"
+                android:textAlignment="center"
+                android:textColor="@color/offWhite" />
+
         </LinearLayout>
     </ScrollView>
 
     <FrameLayout
-        android:id="@+id/bottomLayout"
+        android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
