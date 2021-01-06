@@ -3,4 +3,7 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="dialog_how_to_play">Uhh...I haven\'t made this yet.\nJust wing it, I\'m sure you\'ll be fine.</string>
+    <string name="dialog_ok_button">OK</string>
 </resources>
