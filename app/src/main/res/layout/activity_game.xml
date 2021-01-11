@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -108,7 +109,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="20sp"
                 android:layout_marginBottom="20sp"
-                android:orientation="vertical">
+                android:background="@color/black_overlay"
+                android:orientation="vertical"
+                android:padding="5sp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txtBet2"
@@ -119,13 +123,6 @@
                     android:text="It's player X's turn to bet"
                     android:textAlignment="center"
                     android:textColor="@color/offWhite" />
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Button" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -157,6 +154,166 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/offWhite"
                         android:entries="@array/betSuites" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnPlaceBet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Place Bet" />
+
+                    <Button
+                        android:id="@+id/btnPass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pass" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llPlayingScreen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/black_overlay"
+                android:orientation="vertical"
+                android:padding="5sp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtPlay1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Player 1"
+                            android:textAlignment="center"
+                            android:textColor="@color/offWhite" />
+
+                        <ImageView
+                            android:id="@+id/imgPlay1"
+                            android:layout_width="100dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/offWhite"
+                            android:contentDescription="Turn 1"
+                            app:srcCompat="@drawable/back" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtPlay2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Player 2"
+                            android:textAlignment="center"
+                            android:textColor="@color/offWhite" />
+
+                        <ImageView
+                            android:id="@+id/imgPlay2"
+                            android:layout_width="100dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/offWhite"
+                            android:contentDescription="Turn 2"
+                            app:srcCompat="@drawable/back" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtPlay3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Player 3"
+                            android:textAlignment="center"
+                            android:textColor="@color/offWhite" />
+
+                        <ImageView
+                            android:id="@+id/imgPlay3"
+                            android:layout_width="100dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/offWhite"
+                            android:contentDescription="Turn 1"
+                            app:srcCompat="@drawable/back" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtPlay4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Player 4"
+                            android:textAlignment="center"
+                            android:textColor="@color/offWhite" />
+
+                        <ImageView
+                            android:id="@+id/imgPlay4"
+                            android:layout_width="100dp"
+                            android:layout_height="150dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/offWhite"
+                            android:contentDescription="Turn 2"
+                            app:srcCompat="@drawable/back" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -172,7 +329,8 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal">
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay">
 
             <LinearLayout
                 android:id="@+id/containerPlayerHand"
