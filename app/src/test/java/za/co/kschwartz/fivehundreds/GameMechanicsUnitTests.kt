@@ -471,7 +471,7 @@ class GameMechanicsUnitTests {
                 match.teams[i]!!.score += round.getTotalScoreForTeam(i)
                 println("   Match Score: "+match.teams[i]!!.score)
             }
-        } while (match.teams[1]!!.score < 500 && match.teams[1]!!.score < 500)
+        } while (match.teams[1]!!.score < 500 && match.teams[2]!!.score < 500)
 
         var winningTeam = match.teams[1]!!
         if (winningTeam.score < match.teams[2]!!.score) {
