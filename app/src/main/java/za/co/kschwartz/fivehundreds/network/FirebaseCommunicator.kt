@@ -6,6 +6,9 @@ import za.co.kschwartz.fivehundreds.domain.Match
 import za.co.kschwartz.fivehundreds.domain.Player
 
 class FirebaseCommunicator: MultiplayerCommunicator {
+
+    var match: Match = Match()
+
     override fun createMatch(): Match {
         TODO("Not yet implemented")
     }
