@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.activity_fullscreen.*
-import za.co.kschwartz.fivehundreds.util.AlertMessageDialog
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
