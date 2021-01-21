@@ -1,17 +1,27 @@
 package za.co.kschwartz.fivehundreds
 
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Toast
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_fullscreen.*
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 class FullscreenActivity : AppCompatActivity() {
+    private val RC_SIGN_IN: Int = 42
+    private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
     }
@@ -48,10 +58,28 @@ class FullscreenActivity : AppCompatActivity() {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
 
+        if (user != null) {
+            showStartGameScreen()
+        }
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
         delayedHide(100)
+    }
+
+    private fun showStartGameScreen() {
+        val displayName = (user?.displayName ?: "??Broken User??")
+        llLogin.visibility = View.GONE
+        llStartGame.visibility = View.VISIBLE
+        llLogOut.visibility = View.VISIBLE
+        Toast.makeText(applicationContext, "Welcome $displayName",Toast.LENGTH_SHORT).show()
+        txtUser.text = displayName
+    }
+
+    private fun showLoginScreen() {
+        llLogin.visibility = View.VISIBLE
+        llStartGame.visibility = View.GONE
+        llLogOut.visibility = View.INVISIBLE
     }
 
     private fun toggle() {
@@ -113,6 +141,55 @@ class FullscreenActivity : AppCompatActivity() {
         val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
         builder.setMessage(R.string.dialog_how_to_play)
             .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                dialogInterface.dismiss()
+            })
+            .show()
+    }
+
+    fun loginWithGoogleClicked(view: View) {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.GoogleBuilder().build())
+
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            if (resultCode == Activity.RESULT_OK) {
+                // Successfully signed in
+                user = FirebaseAuth.getInstance().currentUser
+                showStartGameScreen()
+            } else {
+                val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+                builder.setMessage(R.string.dialog_login_failed)
+                    .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .show()
+            }
+        }
+    }
+
+    fun logOut(view: View) {
+        val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+        builder.setMessage(R.string.dialog_logout_prompt)
+            .setPositiveButton(R.string.dialog_yes_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        showLoginScreen()
+                    }
+            })
+            .setNegativeButton(R.string.dialog_no_button, DialogInterface.OnClickListener { dialogInterface, i ->
                 dialogInterface.dismiss()
             })
             .show()

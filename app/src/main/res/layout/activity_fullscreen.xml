@@ -13,12 +13,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/llLogOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/txtUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:padding="3sp"
+                android:text="Logged in as: "
+                android:textColor="@android:color/secondary_text_dark" />
+
+            <TextView
+                android:id="@+id/txtLogOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:onClick="logOut"
+                android:padding="3sp"
+                android:text="Log Out"
+                android:textAlignment="textEnd"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50sp"
+            android:layout_marginTop="35sp"
             android:text="500"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorAccent"
@@ -29,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="The card game"
+            android:text="The four-player card game"
             android:textColor="@android:color/background_light" />
 
         <ImageView
@@ -42,72 +74,104 @@
             app:srcCompat="@drawable/web_hi_res_512" />
 
         <LinearLayout
+            android:id="@+id/llStartGame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="20sp"
-            android:layout_marginRight="20sp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tfGameID"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20sp"
+                android:layout_marginRight="20sp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tfGameID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.5"
+                    android:hint="Game ID"
+                    android:textColorHint="@color/colorAccent"
+                    app:helperText="ID of the game you want to join"
+                    app:helperTextTextColor="@color/colorAccent"
+                    app:hintAnimationEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Small"
+                    app:hintTextColor="@color/colorAccent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/inputGameID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorAccent"
+                        android:inputType="textCapCharacters"
+                        android:singleLine="true"
+                        android:textColor="@color/offWhite"
+                        android:textColorHint="@color/colorAccent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnJoinGame"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="JOIN GAME" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="2.5"
-                android:hint="Game ID"
-                android:textColorHint="@color/colorAccent"
-                app:helperText="ID of the game you want to join"
-                app:helperTextTextColor="@color/colorAccent"
-                app:hintAnimationEnabled="true"
-                app:hintTextAppearance="@style/TextAppearance.AppCompat.Small"
-                app:hintTextColor="@color/colorAccent">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputGameID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorAccent"
-                    android:inputType="textCapCharacters"
-                    android:singleLine="true"
-                    android:textColor="@color/offWhite"
-                    android:textColorHint="@color/colorAccent" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="15sp"
+                android:text="OR"
+                android:textColor="@android:color/background_light" />
 
             <Button
-                android:id="@+id/btnJoinGame"
+                android:id="@+id/btnStartNewGame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20sp"
+                android:layout_marginRight="20sp"
+                android:text="START NEW GAME" />
+
+            <TextView
+                android:id="@+id/txtHowToPlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="JOIN GAME" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="120sp"
+                android:onClick="howToPlayClicked"
+                android:text="How do I play the game?"
+                android:textColor="@android:color/background_light" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="15sp"
-            android:text="OR"
-            android:textColor="@android:color/background_light" />
-
-        <Button
-            android:id="@+id/btnStartNewGame"
+        <LinearLayout
+            android:id="@+id/llLogin"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20sp"
-            android:layout_marginRight="20sp"
-            android:text="START NEW GAME" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtHowToPlay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="120sp"
-            android:onClick="howToPlayClicked"
-            android:text="How do I play the game?"
-            android:textColor="@android:color/background_light" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Please log in to continue"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
+                android:text="Log in with Google"
+                android:onClick="loginWithGoogleClicked"/>
+        </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

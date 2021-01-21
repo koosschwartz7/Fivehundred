@@ -5,7 +5,11 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="dialog_how_to_play">Uhh...I haven\'t made this yet.\nJust wing it, I\'m sure you\'ll be fine.</string>
+    <string name="dialog_login_failed">Login failed, you must log in to play a game.</string>
+    <string name="dialog_logout_prompt">Are you sure you want to log out?</string>
     <string name="dialog_ok_button">OK</string>
+    <string name="dialog_yes_button">YES</string>
+    <string name="dialog_no_button">NO</string>
     <string name="title_activity_lobby">FullscreenActivity</string>
     <string name="title_activity_game">FullscreenActivity</string>
 </resources>
