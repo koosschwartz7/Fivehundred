@@ -1,20 +1,23 @@
 package za.co.kschwartz.fivehundreds.domain
 
 import za.co.kschwartz.fivehundreds.MatchException
+import kotlin.random.Random
 
 class Match {
 
-    var teams = mutableMapOf<Int,Team>()
+    var teams = mutableMapOf<String,Team>()
     var rounds = arrayListOf<Round>()
+    val CODELENGTH = 6
+    var uniqueMatchCode = generateMatchCode()
 
     init {
         teams.clear();
-        teams.put(1,Team(1))
-        teams.put(2,Team(2))
+        teams.put("Team 1",Team(1))
+        teams.put("Team 2",Team(2))
     }
 
     fun joinPlayer(player: Player, teamNr: Int): Boolean {
-        val team: Team? = teams[teamNr]
+        val team: Team? = teams["Team $teamNr"]
         if (team != null) {
             return team.addPlayer(player)
         }
@@ -22,12 +25,12 @@ class Match {
     }
 
     fun playNewRound(): Round {
-        if (teams[1]!!.players.size < 2 || teams[2]!!.players.size < 2) {
+        if (teams["Team 1"]!!.players.size < 2 || teams["Team 2"]!!.players.size < 2) {
             throw MatchException("Match requires four players to start.")
         }
 
-        var round: Round = Round(teams[1]!!.players[1]!!,
-            teams[2]!!.players[1]!!, teams[1]!!.players[2]!!, teams[2]!!.players[2]!!, rounds.size, getInitialBettingPlayerIndex())
+        var round: Round = Round(teams["Team 1"]!!.players[1]!!,
+            teams["Team 2"]!!.players[1]!!, teams["Team 1"]!!.players[2]!!, teams["Team 2"]!!.players[2]!!, rounds.size, getInitialBettingPlayerIndex())
         rounds.add(round)
         return round;
     }
@@ -43,6 +46,17 @@ class Match {
         }
 
         return initialBettingPlayerIndex
+    }
+
+    fun generateMatchCode():String {
+        val charPool : List<Char> = ('A'..'Z') + ('0'..'9')
+        val rand = Random(System.nanoTime())
+        var randomString = ""
+        for (i in 1..CODELENGTH) {
+            randomString += charPool[(charPool.indices).random(rand)]
+        }
+        uniqueMatchCode = randomString
+        return uniqueMatchCode
     }
 
 }

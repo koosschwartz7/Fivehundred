@@ -468,14 +468,14 @@ class GameMechanicsUnitTests {
                 for (desc in round.getScoreBreakdownForTeam(i)) {
                     println("       "+desc.key+" : "+desc.value)
                 }
-                match.teams[i]!!.score += round.getTotalScoreForTeam(i)
-                println("   Match Score: "+match.teams[i]!!.score)
+                match.teams["Team $i"]!!.score += round.getTotalScoreForTeam(i)
+                println("   Match Score: "+match.teams["Team $i"]!!.score)
             }
-        } while (match.teams[1]!!.score < 500 && match.teams[2]!!.score < 500)
+        } while (match.teams["Team 1"]!!.score < 500 && match.teams["Team 2"]!!.score < 500)
 
-        var winningTeam = match.teams[1]!!
-        if (winningTeam.score < match.teams[2]!!.score) {
-            winningTeam = match.teams[2]!!
+        var winningTeam = match.teams["Team 1"]!!
+        if (winningTeam.score < match.teams["Team 2"]!!.score) {
+            winningTeam = match.teams["Team 2"]!!
         }
         println("<<<<<DONE>>>>>>")
         println("Winning Team: "+winningTeam.teamNr+" with score "+winningTeam.score)
@@ -496,6 +496,15 @@ class GameMechanicsUnitTests {
         } while (retSuit == Suit.NULLSUIT)
 
         return retSuit
+    }
+
+    @Test
+    fun matchCodeGenerated() {
+        var match = Match()
+        assertEquals(match.CODELENGTH, match.uniqueMatchCode.length)
+        val matchCode = match.uniqueMatchCode
+        match.generateMatchCode()
+        assertNotEquals(match.uniqueMatchCode, matchCode)
     }
 
 }

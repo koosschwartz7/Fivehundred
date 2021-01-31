@@ -136,7 +136,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20sp"
                 android:layout_marginRight="20sp"
-                android:text="START NEW GAME" />
+                android:text="START NEW GAME"
+                android:onClick="btnStartNewGameClicked"/>
 
             <TextView
                 android:id="@+id/txtHowToPlay"

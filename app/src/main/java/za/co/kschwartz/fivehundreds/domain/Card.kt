@@ -1,6 +1,6 @@
 package za.co.kschwartz.fivehundreds.domain
 
-class Card(suit: Suit, value: Int) {
+class Card(suit: Suit = Suit.NULLSUIT, value: Int = 0) {
     val suit: Suit = suit
     val value: Int = value
 

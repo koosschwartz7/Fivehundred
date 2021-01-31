@@ -14,12 +14,15 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_fullscreen.*
+import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
+import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
+import za.co.kschwartz.fivehundreds.network.ResponseReceiver
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class FullscreenActivity : AppCompatActivity() {
+class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
     private val RC_SIGN_IN: Int = 42
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private val mHideHandler = Handler()
@@ -190,6 +193,24 @@ class FullscreenActivity : AppCompatActivity() {
                     }
             })
             .setNegativeButton(R.string.dialog_no_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                dialogInterface.dismiss()
+            })
+            .show()
+    }
+
+    fun btnStartNewGameClicked(view: View) {
+        val multiplayerCommunicator:MultiplayerCommunicator = FirebaseCommunicator(this)
+        val match = multiplayerCommunicator.createMatch()
+    }
+
+    override fun joinMatchSuccess() {
+        Toast.makeText(applicationContext, "Joining match...",Toast.LENGTH_SHORT).show()
+    }
+
+    override fun joinMatchFailure(message: String) {
+        val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+        builder.setMessage(message)
+            .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
                 dialogInterface.dismiss()
             })
             .show()

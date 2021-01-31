@@ -1,6 +1,6 @@
 package za.co.kschwartz.fivehundreds.domain
 
-class Team(teamNr: Int) {
+class Team(teamNr: Int = 1) {
 
     var players = mutableMapOf<Int,Player>()
     var score: Int = 0

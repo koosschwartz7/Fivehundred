@@ -1,6 +1,6 @@
 package za.co.kschwartz.fivehundreds.domain
 
-abstract class Deck(size: Int) {
+abstract class Deck(size: Int = 0) {
     val size: Int = size
     val cards = mutableListOf<Card>()
 

@@ -7,6 +7,8 @@ import za.co.kschwartz.fivehundreds.domain.Player
 
 interface MultiplayerCommunicator {
 
+    val responseReceiver:ResponseReceiver
+
     fun createMatch(): Match
 
     fun joinMatch(matchId: String, playerName: String)
