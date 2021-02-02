@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "448372120227",
+    "firebase_url": "https://fivehundreds-d5130-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "fivehundreds-d5130",
+    "storage_bucket": "fivehundreds-d5130.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448372120227:android:6378086f35984208bcfd16",
+        "android_client_info": {
+          "package_name": "za.co.kschwartz.fivehundreds"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448372120227-6mobao50ldrvh871rmnt94ro38tl6rkd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.co.kschwartz.fivehundreds",
+            "certificate_hash": "976e3465a3171bb2fd432d6ceb192785710158cc"
+          }
+        },
+        {
+          "client_id": "448372120227-kcbsvk9vch6v2370fdoi4df9coij5rcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "za.co.kschwartz.fivehundreds",
+            "certificate_hash": "56b68e9ccfe5f602eac13cf1ebf8df2c08f211f1"
+          }
+        },
+        {
+          "client_id": "448372120227-bnvb5g4l78cblrpadteh3bpd07en3ui8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX9cppi8_0Da8Bf7YgSRORKLdYW7G3LeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448372120227-bnvb5g4l78cblrpadteh3bpd07en3ui8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

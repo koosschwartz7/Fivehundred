@@ -9,15 +9,27 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import za.co.kschwartz.fivehundreds.domain.Match
+import za.co.kschwartz.fivehundreds.domain.Player
+import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
+import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
+import za.co.kschwartz.fivehundreds.network.ResponseReceiver
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-class LobbyActivity : AppCompatActivity() {
+class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     private lateinit var fullscreenContent: TextView
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler()
+
+    private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    var multiplayerCommunicator: MultiplayerCommunicator = FirebaseCommunicator(this)
+    var match = Match()
 
     @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
@@ -77,7 +89,14 @@ class LobbyActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById<Button>(R.id.dummy_button).setOnTouchListener(delayHideTouchListener)
+
+        val gameId = intent.getStringExtra("GAMEID")
+        if (gameId != null) {
+            multiplayerCommunicator.joinMatch(gameId, getDisplayName())
+        }
     }
+
+    private fun getDisplayName() = (user?.displayName ?: "??Broken User??")
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
@@ -146,5 +165,17 @@ class LobbyActivity : AppCompatActivity() {
          * and a change of the status and navigation bar.
          */
         private const val UI_ANIMATION_DELAY = 300
+    }
+
+    override fun joinMatchSuccess(match: Match) {
+        this.match = match
+        val playerNr = match.getNextAvailablePlayerNr()
+        val player = Player(getDisplayName(), match.getNextAvailTeamNr(), playerNr)
+        multiplayerCommunicator.switchPlayerSlot(playerNr, player)
+    }
+
+    override fun joinMatchFailure(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+        finish()
     }
 }

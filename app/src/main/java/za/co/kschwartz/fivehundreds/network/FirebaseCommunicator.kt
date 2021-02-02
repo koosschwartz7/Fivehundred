@@ -46,7 +46,7 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     match = dataSnapshot.getValue<Match>() as Match
-                    responseReceiver.joinMatchSuccess()
+                    responseReceiver.joinMatchSuccess(match)
                 } else {
                     responseReceiver.joinMatchFailure("The given game ID does not exist.")
                 }

@@ -1,6 +1,6 @@
 package za.co.kschwartz.fivehundreds.domain
 
-class Player(name: String = "", team: Int = 1, playerNr: Int = 1) {
+class Player(name: String = "", team: Int = 1, playerNr: Int = 99) {
     val name: String = name
     var hand = mutableListOf<Card>()
     var team: Int = team

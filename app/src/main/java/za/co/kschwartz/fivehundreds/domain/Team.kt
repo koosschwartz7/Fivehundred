@@ -8,7 +8,7 @@ class Team(teamNr: Int = 1) {
 
     fun addPlayer(player: Player):Boolean {
         if (players.size < 2) {
-            players.put(players.size+1, player)
+            players[players.size+1] = player
             return true
         }
         return false

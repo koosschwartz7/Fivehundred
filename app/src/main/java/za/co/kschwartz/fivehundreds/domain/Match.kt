@@ -59,4 +59,26 @@ class Match {
         return uniqueMatchCode
     }
 
+    fun getNextAvailablePlayerNr(): Int {
+        var playerNr = 1
+        for (i in 1..2) {
+            for (j in 1..2) {
+                if (teams["Team $i"]?.players?.get(j)?.playerNr  == 99) {
+                    return playerNr
+                } else {
+                    playerNr++
+                }
+            }
+        }
+        return playerNr
+    }
+
+    fun getNextAvailTeamNr():Int {
+        return if (getNextAvailTeamNr() < 3) {
+            1
+        } else {
+            2
+        }
+    }
+
 }

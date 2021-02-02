@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_fullscreen.*
+import za.co.kschwartz.fivehundreds.domain.Match
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
 import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
 import za.co.kschwartz.fivehundreds.network.ResponseReceiver
@@ -25,6 +26,7 @@ import za.co.kschwartz.fivehundreds.network.ResponseReceiver
 class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
     private val RC_SIGN_IN: Int = 42
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    var multiplayerCommunicator:MultiplayerCommunicator = FirebaseCommunicator(this)
     private val mHideHandler = Handler()
     private val mHidePart2Runnable = Runnable {
     }
@@ -199,12 +201,15 @@ class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     fun btnStartNewGameClicked(view: View) {
-        val multiplayerCommunicator:MultiplayerCommunicator = FirebaseCommunicator(this)
         val match = multiplayerCommunicator.createMatch()
     }
 
-    override fun joinMatchSuccess() {
-        Toast.makeText(applicationContext, "Joining match...",Toast.LENGTH_SHORT).show()
+    override fun joinMatchSuccess(match: Match) {
+        Toast.makeText(applicationContext, "Joining match "+match.uniqueMatchCode+"...",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LobbyActivity::class.java).apply {
+            putExtra("GAMEID", match.uniqueMatchCode)
+        }
+        startActivity(intent)
     }
 
     override fun joinMatchFailure(message: String) {
