@@ -13,6 +13,8 @@ interface MultiplayerCommunicator {
 
     fun joinMatch(matchId: String, playerName: String)
 
+    fun leaveMatch(match: Match, player: Player)
+
     fun switchPlayerSlot(newSlotNr: Int, player: Player)
 
     fun startMatch()

@@ -114,43 +114,32 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/txtGameID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tap on a Slot to switch"
                     android:textAlignment="center"
                     android:textColor="@color/offWhite" />
 
+                <LinearLayout
+                    android:id="@+id/containerPlayerHand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:background="@color/black_overlay"
+                    android:orientation="horizontal"
+                    tools:ignore="UselessParent">
+
+                    <Button
+                        android:id="@+id/btnStartGame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="Start Game" />
+                </LinearLayout>
+
             </LinearLayout>
         </ScrollView>
-
-        <FrameLayout
-            android:id="@+id/fullscreen_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
-
-            <LinearLayout
-                android:id="@+id/containerPlayerHand"
-                style="?metaButtonBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/black_overlay"
-                android:orientation="horizontal"
-                tools:ignore="UselessParent">
-
-                <Button
-                    android:id="@+id/dummy_button"
-                    style="?metaButtonBarButtonStyle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:text="Start Game" />
-
-            </LinearLayout>
-        </FrameLayout>
 
     </FrameLayout>
 </layout>

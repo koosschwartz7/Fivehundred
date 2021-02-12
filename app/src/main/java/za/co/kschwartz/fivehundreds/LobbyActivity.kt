@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.activity_lobby.*
+import za.co.kschwartz.fivehundreds.databinding.ActivityLobbyBinding
 import za.co.kschwartz.fivehundreds.domain.Match
 import za.co.kschwartz.fivehundreds.domain.Player
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
@@ -23,33 +23,17 @@ import za.co.kschwartz.fivehundreds.network.ResponseReceiver
  * status bar and navigation/system bar) with user interaction.
  */
 class LobbyActivity : AppCompatActivity(), ResponseReceiver {
-    private lateinit var fullscreenContent: TextView
-    private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler()
 
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     var multiplayerCommunicator: MultiplayerCommunicator = FirebaseCommunicator(this)
     var match = Match()
 
-    @SuppressLint("InlinedApi")
-    private val hidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
+    private lateinit var binding: ActivityLobbyBinding
 
-        // Note that some of these constants are new as of API 16 (Jelly Bean)
-        // and API 19 (KitKat). It is safe to use them, as they are inlined
-        // at compile-time and do nothing on earlier devices.
-        fullscreenContent.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                    View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
     private val showPart2Runnable = Runnable {
         // Delayed display of UI elements
         supportActionBar?.show()
-        fullscreenContentControls.visibility = View.VISIBLE
     }
     private var isFullscreen: Boolean = false
 
@@ -81,19 +65,13 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
 
         isFullscreen = true
 
-        // Set up the user interaction to manually show or hide the system UI.
-        fullscreenContent = findViewById(R.id.fullscreen_content)
-        fullscreenContent.setOnClickListener { toggle() }
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById<Button>(R.id.dummy_button).setOnTouchListener(delayHideTouchListener)
 
         val gameId = intent.getStringExtra("GAMEID")
         if (gameId != null) {
             multiplayerCommunicator.joinMatch(gameId, getDisplayName())
+            this.match.uniqueMatchCode = gameId
         }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_lobby)
     }
 
     private fun getDisplayName() = (user?.displayName ?: "??Broken User??")
@@ -107,35 +85,13 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
         delayedHide(100)
     }
 
-    private fun toggle() {
-        if (isFullscreen) {
-            hide()
-        } else {
-            show()
-        }
-    }
-
     private fun hide() {
         // Hide UI first
         supportActionBar?.hide()
-        fullscreenContentControls.visibility = View.GONE
         isFullscreen = false
 
         // Schedule a runnable to remove the status and navigation bar after a delay
         hideHandler.removeCallbacks(showPart2Runnable)
-        hideHandler.postDelayed(hidePart2Runnable, UI_ANIMATION_DELAY.toLong())
-    }
-
-    private fun show() {
-        // Show the system bar
-        fullscreenContent.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        isFullscreen = true
-
-        // Schedule a runnable to display UI elements after a delay
-        hideHandler.removeCallbacks(hidePart2Runnable)
-        hideHandler.postDelayed(showPart2Runnable, UI_ANIMATION_DELAY.toLong())
     }
 
     /**
@@ -172,10 +128,55 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
         val playerNr = match.getNextAvailablePlayerNr()
         val player = Player(getDisplayName(), match.getNextAvailTeamNr(), playerNr)
         multiplayerCommunicator.switchPlayerSlot(playerNr, player)
+        txtGameID.text = "Game ID: "+match.uniqueMatchCode
     }
 
     override fun joinMatchFailure(message: String) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    override fun leaveMatchSuccess(match: Match) {
+        Toast.makeText(applicationContext, "Disconnected from match", Toast.LENGTH_SHORT).show()
+        finish()
+    }
+
+    override fun matchUpdated(match: Match) {
+        var waitingForNr = 4;
+        val player1 = match.teams["Team 1"]?.players?.get("Player 1")
+        val player2 = match.teams["Team 1"]?.players?.get("Player 2")
+        val player3 = match.teams["Team 2"]?.players?.get("Player 1")
+        val player4 = match.teams["Team 2"]?.players?.get("Player 2")
+
+        if (player1 != null) {
+            txtPlayer1.text = player1.name
+            waitingForNr--
+        } else {
+            txtPlayer1.text = "1. (empty)"
+        }
+
+        if (player2 != null) {
+            txtPlayer2.text = player2.name
+            waitingForNr--
+        } else {
+            txtPlayer2.text = "2. (empty)"
+        }
+
+        if (player3 != null) {
+            txtPlayer3.text = player3.name
+            waitingForNr--
+        } else {
+            txtPlayer3.text = "3. (empty)"
+        }
+
+        if (player4 != null) {
+            txtPlayer4.text = player4.name
+            waitingForNr--
+        } else {
+            txtPlayer4.text = "4. (empty)"
+        }
+
+        btnStartGame.isEnabled = player1 != null && player2 != null && player3 != null && player4 != null
+        txtWaitingForPlayers.text = "Waiting for $waitingForNr more players"
     }
 }

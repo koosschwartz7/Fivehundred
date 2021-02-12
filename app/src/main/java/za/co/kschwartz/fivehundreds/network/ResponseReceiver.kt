@@ -8,4 +8,8 @@ interface ResponseReceiver {
 
     fun joinMatchFailure(message: String)
 
+    fun leaveMatchSuccess(match: Match)
+
+    fun matchUpdated(match: Match)
+
 }

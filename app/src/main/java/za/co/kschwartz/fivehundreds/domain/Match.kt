@@ -29,8 +29,8 @@ class Match {
             throw MatchException("Match requires four players to start.")
         }
 
-        var round: Round = Round(teams["Team 1"]!!.players[1]!!,
-            teams["Team 2"]!!.players[1]!!, teams["Team 1"]!!.players[2]!!, teams["Team 2"]!!.players[2]!!, rounds.size, getInitialBettingPlayerIndex())
+        var round = Round(teams["Team 1"]!!.players["Player 1"]!!,
+            teams["Team 2"]!!.players["Player 1"]!!, teams["Team 1"]!!.players["Player 2"]!!, teams["Team 2"]!!.players["Player 2"]!!, rounds.size, getInitialBettingPlayerIndex())
         rounds.add(round)
         return round;
     }
@@ -63,10 +63,9 @@ class Match {
         var playerNr = 1
         for (i in 1..2) {
             for (j in 1..2) {
-                if (teams["Team $i"]?.players?.get(j)?.playerNr  == 99) {
-                    return playerNr
-                } else {
-                    playerNr++
+                val player = teams["Team $i"]?.players?.get("Player $j")
+                if (player == null || player.playerNr == 99) {
+                    return j
                 }
             }
         }
@@ -74,7 +73,7 @@ class Match {
     }
 
     fun getNextAvailTeamNr():Int {
-        return if (getNextAvailTeamNr() < 3) {
+        return if (getNextAvailablePlayerNr() < 3) {
             1
         } else {
             2

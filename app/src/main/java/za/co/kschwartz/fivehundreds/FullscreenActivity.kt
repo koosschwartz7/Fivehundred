@@ -220,4 +220,12 @@ class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
             })
             .show()
     }
+
+    override fun leaveMatchSuccess(match: Match) {
+        //Nothing
+    }
+
+    override fun matchUpdated(match: Match) {
+        //Nothing
+    }
 }
