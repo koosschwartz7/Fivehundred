@@ -73,13 +73,15 @@ class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     private fun showStartGameScreen() {
-        val displayName = (user?.displayName ?: "??Broken User??")
+        val displayName = getDisplayName()
         llLogin.visibility = View.GONE
         llStartGame.visibility = View.VISIBLE
         llLogOut.visibility = View.VISIBLE
         Toast.makeText(applicationContext, "Welcome $displayName",Toast.LENGTH_SHORT).show()
         txtUser.text = displayName
     }
+
+    private fun getDisplayName() = (user?.displayName ?: "??Broken User??")
 
     private fun showLoginScreen() {
         llLogin.visibility = View.VISIBLE
@@ -227,5 +229,14 @@ class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
 
     override fun matchUpdated(match: Match) {
         //Nothing
+    }
+
+    fun btnJoinGameClicked(view: View) {
+        val gameID = inputGameID.text.toString()
+        if (gameID.length != 6){
+            Toast.makeText(applicationContext, "Please enter a valid Game ID",Toast.LENGTH_SHORT).show()
+        } else {
+            multiplayerCommunicator.joinMatch(gameID, getDisplayName())
+        }
     }
 }
