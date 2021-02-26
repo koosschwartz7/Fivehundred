@@ -2,6 +2,7 @@ package za.co.kschwartz.fivehundreds
 
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.MotionEvent
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_lobby.*
 import za.co.kschwartz.fivehundreds.databinding.ActivityLobbyBinding
 import za.co.kschwartz.fivehundreds.domain.Match
+import za.co.kschwartz.fivehundreds.domain.MatchState
 import za.co.kschwartz.fivehundreds.domain.Player
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
 import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
@@ -28,6 +30,8 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     var multiplayerCommunicator: MultiplayerCommunicator = FirebaseCommunicator(this)
     var match = Match()
+    var playerNr = 0
+    var teamNr = 0
 
     private lateinit var binding: ActivityLobbyBinding
 
@@ -124,9 +128,11 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     override fun joinMatchSuccess(match: Match) {
+        //TODO: Rejoin Functionality
         this.match = match
-        val playerNr = match.getNextAvailablePlayerNr()
-        val player = Player(getDisplayName(), match.getNextAvailTeamNr(), playerNr)
+        playerNr = match.getNextAvailablePlayerNr()
+        teamNr = match.getNextAvailTeamNr()
+        val player = Player(getDisplayName(), teamNr, playerNr)
         multiplayerCommunicator.switchPlayerSlot(playerNr, player)
         txtGameID.text = "Game ID: "+match.uniqueMatchCode
     }
@@ -142,6 +148,25 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     override fun matchUpdated(match: Match) {
+        if (match.status == MatchState.IN_PROGRESS) {
+            startGameActivityFor(match)
+        } else {
+            updateLobbyUI(match)
+        }
+    }
+
+    private fun startGameActivityFor(match: Match) {
+        multiplayerCommunicator.disconnect()
+        Toast.makeText(applicationContext, "Game is starting!",Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, GameActivity::class.java).apply {
+            putExtra("GAMEID", match.uniqueMatchCode)
+            putExtra("TEAMNR", teamNr)
+            putExtra("PLAYERNR", playerNr)
+        }
+        startActivity(intent)
+    }
+
+    private fun updateLobbyUI(match: Match) {
         var waitingForNr = 4;
         val player1 = match.teams["Team 1"]?.players?.get("Player 1")
         val player2 = match.teams["Team 1"]?.players?.get("Player 2")
@@ -177,6 +202,14 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
         }
 
         btnStartGame.isEnabled = player1 != null && player2 != null && player3 != null && player4 != null
-        txtWaitingForPlayers.text = "Waiting for $waitingForNr more players"
+        if (waitingForNr > 0) {
+            txtWaitingForPlayers.text = "Waiting for $waitingForNr more players"
+        } else {
+            txtWaitingForPlayers.text = "Ready to start the match!"
+        }
+    }
+
+    fun btnStartGameClicked(view: View) {
+        multiplayerCommunicator.startMatch()
     }
 }

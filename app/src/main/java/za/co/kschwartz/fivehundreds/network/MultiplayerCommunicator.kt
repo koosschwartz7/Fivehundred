@@ -15,6 +15,8 @@ interface MultiplayerCommunicator {
 
     fun leaveMatch(match: Match, player: Player)
 
+    fun disconnect()
+
     fun switchPlayerSlot(newSlotNr: Int, player: Player)
 
     fun startMatch()

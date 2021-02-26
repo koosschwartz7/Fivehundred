@@ -9,6 +9,7 @@ class Match {
     var rounds = arrayListOf<Round>()
     val CODELENGTH = 6
     var uniqueMatchCode = generateMatchCode()
+    var status = MatchState.LOBBY
 
     init {
         teams.clear();
@@ -35,7 +36,6 @@ class Match {
         return round;
     }
 
-    //TODO: Test
     private fun getInitialBettingPlayerIndex():Int {
         var initialBettingPlayerIndex = 0
         if (rounds.size > 0) {
@@ -73,11 +73,15 @@ class Match {
     }
 
     fun getNextAvailTeamNr():Int {
-        return if (getNextAvailablePlayerNr() < 3) {
-            1
-        } else {
-            2
+        for (i in 1..2) {
+            for (j in 1..2) {
+                val player = teams["Team $i"]?.players?.get("Player $j")
+                if (player == null || player.playerNr == 99) {
+                    return i
+                }
+            }
         }
+        return 99
     }
 
 }

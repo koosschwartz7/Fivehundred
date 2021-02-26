@@ -10,10 +10,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import za.co.kschwartz.fivehundreds.domain.Bet
-import za.co.kschwartz.fivehundreds.domain.Card
-import za.co.kschwartz.fivehundreds.domain.Match
-import za.co.kschwartz.fivehundreds.domain.Player
+import za.co.kschwartz.fivehundreds.domain.*
 
 class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : MultiplayerCommunicator {
 
@@ -66,6 +63,12 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
     override fun leaveMatch(match: Match, player: Player) {
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         match.teams["Team " + player.team]?.players?.remove("Player "+player.playerNr)
+        fbMatchNode.setValue(match)
+        disconnect()
+    }
+
+    override fun disconnect() {
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         fbMatchNode.removeEventListener(matchUpdateListener)
     }
 
@@ -94,7 +97,9 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
     }
 
     override fun startMatch() {
-        //TODO("Not yet implemented")
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+        match.status = MatchState.IN_PROGRESS
+        fbMatchNode.setValue(match)
     }
 
     override fun placeBet(bet: Bet) {
