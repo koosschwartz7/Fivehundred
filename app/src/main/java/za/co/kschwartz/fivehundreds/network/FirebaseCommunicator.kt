@@ -43,8 +43,9 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
         val fbMatchNode = database.child("matches").child(matchId)
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists() && dataSnapshot.value != null) {
                     match = dataSnapshot.getValue<Match>() as Match
+                    fbMatchNode.addValueEventListener(matchUpdateListener)
                     responseReceiver.joinMatchSuccess(match)
                 } else {
                     responseReceiver.joinMatchFailure("The given game ID does not exist.")
@@ -57,8 +58,6 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
             }
         }
         fbMatchNode.addListenerForSingleValueEvent(postListener)
-
-        fbMatchNode.addValueEventListener(matchUpdateListener)
     }
 
     override fun leaveMatch(match: Match, player: Player) {

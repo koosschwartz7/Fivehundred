@@ -332,15 +332,22 @@
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/black_overlay">
 
-            <LinearLayout
-                android:id="@+id/containerPlayerHand"
-                style="?metaButtonBarStyle"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="125sp"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="@color/black_overlay"
-                android:orientation="horizontal"
-                tools:ignore="UselessParent" />
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/containerPlayerHand"
+                    style="?metaButtonBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="125dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:background="@color/black_overlay"
+                    android:orientation="horizontal"
+                    tools:ignore="UselessParent">
+
+                </LinearLayout>
+            </FrameLayout>
         </HorizontalScrollView>
 
     </FrameLayout>

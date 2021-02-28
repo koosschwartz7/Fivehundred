@@ -135,6 +135,12 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     fun getScoreBreakdownForTeam(teamNr: Int): Map<String, Int> {
         val packsTaken: Int = getNrOfPacksTakenForTeam(teamNr)
         var breakdown = mutableMapOf<String, Int>()
+
+        if (bet.trumpSuit == Suit.NULLSUIT) {
+            breakdown["No Bet"] = 0
+            return breakdown
+        }
+
         val betScoreValue = bet.trumpSuit.trumpWeight + ((bet.nrPacks-6) * 50)
 
         if (packsTaken == 10) {

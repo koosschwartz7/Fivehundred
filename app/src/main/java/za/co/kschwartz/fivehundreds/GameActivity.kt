@@ -45,6 +45,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
         setContentView(R.layout.activity_game)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.hide()
 
         uid = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
         gameId = intent.getStringExtra("GAMEID").toString()
