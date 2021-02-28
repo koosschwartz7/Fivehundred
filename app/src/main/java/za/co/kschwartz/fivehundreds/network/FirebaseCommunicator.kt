@@ -106,11 +106,6 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         val round = match.playNewRound()
         deck.reset()
-        for (team in match.teams.values) {
-            for (player in team.players.values) {
-                player.hand.clear()
-            }
-        }
         round.dealHand(deck)
         fbMatchNode.setValue(match)
     }

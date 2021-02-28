@@ -24,6 +24,8 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
             for (i in 0..9) {
                 p.hand.add(i, deck.drawRandomCard())
             }
+            val sortedHand = p.hand.sortedWith(compareBy(Card::suit, Card::value))
+            p.hand = ArrayList(sortedHand)
         }
     }
 
