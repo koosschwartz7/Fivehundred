@@ -4,7 +4,7 @@ package za.co.kschwartz.fivehundreds.domain
  * A pack is the collection of the 4 turns played by the 4 players, for the total of 4 cards
  */
 class Pack(player1: Player = Player(), player2: Player = Player(), player3: Player = Player(), player4: Player = Player())  {
-    var turns = arrayOf<Turn>(Turn(player1), Turn(player2), Turn(player3), Turn(player4))
+    var turns = arrayListOf<Turn>(Turn(player1), Turn(player2), Turn(player3), Turn(player4))
 
     /**
      * Determines the winning turn in this pack

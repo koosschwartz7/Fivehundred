@@ -21,6 +21,8 @@ interface MultiplayerCommunicator {
 
     fun startMatch()
 
+    fun startNewRound()
+
     fun placeBet(bet: Bet)
 
     fun passBet()

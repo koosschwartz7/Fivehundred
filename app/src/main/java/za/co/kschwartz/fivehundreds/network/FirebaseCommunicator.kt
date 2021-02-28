@@ -19,6 +19,7 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
     var database: DatabaseReference = Firebase.database.reference
     private var user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     private var matchUpdateListener = getMatchUpdatedListener()
+    val deck = FivehundredDeck()
 
 
     override fun createMatch(): Match {
@@ -99,6 +100,19 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
     override fun startMatch() {
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         match.status = MatchState.IN_PROGRESS
+        fbMatchNode.setValue(match)
+    }
+
+    override fun startNewRound() {
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+        val round = match.playNewRound()
+        deck.reset()
+        for (team in match.teams.values) {
+            for (player in team.players.values) {
+                player.hand.clear()
+            }
+        }
+        round.dealHand(deck)
         fbMatchNode.setValue(match)
     }
 

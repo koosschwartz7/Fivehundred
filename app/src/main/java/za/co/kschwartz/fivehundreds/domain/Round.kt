@@ -1,9 +1,20 @@
 package za.co.kschwartz.fivehundreds.domain
 
 class Round(player1: Player = Player(), player2: Player = Player(), player3: Player = Player(), player4: Player = Player(), roundNr: Int = 0, var nextBettingPlayerIndex: Int = 0) {
-    val players = arrayOf<Player>(player1, player2, player3, player4)
+    val players = arrayListOf<Player>(player1, player2, player3, player4)
     val roundNr: Int = roundNr
-    var packs = Array<Pack>(10){Pack(player1, player2, player3, player4)}
+    var packs = arrayListOf<Pack>(
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4),
+            Pack(player1, player2, player3, player4)
+    )
     var bet:Bet = Bet(Suit.NULLSUIT, players[nextBettingPlayerIndex], 99)
     var initialBettingPlayerIndex:Int = nextBettingPlayerIndex;
 

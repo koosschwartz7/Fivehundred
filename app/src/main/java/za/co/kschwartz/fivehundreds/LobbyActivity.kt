@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.provider.Settings
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
@@ -32,6 +33,7 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     var match = Match()
     var playerNr = 0
     var teamNr = 0
+    var uid = "undetermined"
 
     private lateinit var binding: ActivityLobbyBinding
 
@@ -69,7 +71,7 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
 
         isFullscreen = true
 
-
+        uid = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
         val gameId = intent.getStringExtra("GAMEID")
         if (gameId != null) {
             multiplayerCommunicator.joinMatch(gameId, getDisplayName())
@@ -128,13 +130,20 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     override fun joinMatchSuccess(match: Match) {
-        //TODO: Rejoin Functionality
         this.match = match
-        playerNr = match.getNextAvailablePlayerNr()
-        teamNr = match.getNextAvailTeamNr()
-        val player = Player(getDisplayName(), teamNr, playerNr)
-        multiplayerCommunicator.switchPlayerSlot(playerNr, player)
         txtGameID.text = "Game ID: "+match.uniqueMatchCode
+        if (playerAlreadyJoined()) {
+            determinePlayerValues()
+            if (match.status == MatchState.IN_PROGRESS) {
+                startGameActivityFor(match)
+            }
+        } else {
+            playerNr = match.getNextAvailablePlayerNr()
+            teamNr = match.getNextAvailTeamNr()
+            val player = Player(getDisplayName(), teamNr, playerNr, uid)
+            multiplayerCommunicator.switchPlayerSlot(playerNr, player)
+        }
+
     }
 
     override fun joinMatchFailure(message: String) {
@@ -164,6 +173,7 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
             putExtra("PLAYERNR", playerNr)
         }
         startActivity(intent)
+        //finish()
     }
 
     private fun updateLobbyUI(match: Match) {
@@ -211,5 +221,32 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
 
     fun btnStartGameClicked(view: View) {
         multiplayerCommunicator.startMatch()
+    }
+
+    private fun playerAlreadyJoined():Boolean {
+        for (team in match.teams.values) {
+            for (player in team.players.values) {
+                if (player.uniqueID == uid) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    private fun determinePlayerValues() {
+        var teamNr = 1
+        for (team in match.teams.values) {
+            var playerNr = 1
+            for (player in team.players.values) {
+                if (player.uniqueID == uid) {
+                    this.playerNr = playerNr
+                    this.teamNr = teamNr
+                    return
+                }
+                playerNr++
+            }
+            teamNr++
+        }
     }
 }
