@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkGrey">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/txtBettingScreenTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5sp"
+                android:layout_weight="1"
+                android:text="Betting Time!"
+                android:textColor="@color/offWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtBettingScreenTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5sp"
+                android:layout_weight="1"
+                android:text="Choose trumps and place bets on how many packs your team will take this round."
+                android:textAlignment="center"
+                android:textColor="@color/offWhite" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/black_overlay">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/llTeam1Bets"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtBettingScreenTitle3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Team 1"
+                            android:textColor="@color/offWhite"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTeam2Bets"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txtBettingScreenTitle4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Team 2"
+                            android:textColor="@color/offWhite"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </TableRow>
+
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/txtCurrentBet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5sp"
+                android:layout_weight="1"
+                android:text="Current Bet: -"
+                android:textColor="@color/offWhite" />
+
+            <TextView
+                android:id="@+id/txtBetTurn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5sp"
+                android:layout_weight="1"
+                android:text="It's Player 1's turn to bet"
+                android:textColor="@color/offWhite" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_weight="1"
+                android:background="@color/black_overlay"
+                android:orientation="vertical"
+                android:padding="6dp">
+
+                <Button
+                    android:id="@+id/btnPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PASS" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:text="OR"
+                    android:textAlignment="center"
+                    android:textColor="@color/offWhite" />
+
+                <RadioGroup
+                    android:id="@+id/rgrpBetSuit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/btnSpades"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/offWhite"
+                        android:checked="true"
+                        android:text="Spades"
+                        android:textColor="@color/offWhite" />
+
+                    <RadioButton
+                        android:id="@+id/btnClubs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/offWhite"
+                        android:text="Clubs"
+                        android:textColor="@color/offWhite" />
+
+                    <RadioButton
+                        android:id="@+id/btnDiamonds"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/offWhite"
+                        android:text="Diamonds"
+                        android:textColor="@color/offWhite" />
+
+                    <RadioButton
+                        android:id="@+id/btnHearts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/offWhite"
+                        android:text="Hearts"
+                        android:textColor="@color/offWhite" />
+
+                    <RadioButton
+                        android:id="@+id/btnNoTrumps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/offWhite"
+                        android:text="No Trumps"
+                        android:textColor="@color/offWhite" />
+                </RadioGroup>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txtBetTurn2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Number of packs: "
+                        android:textColor="@color/offWhite"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                        android:id="@+id/edtBetNrPacks"
+                        style="@android:style/Widget.Material.Light.EditText"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:ems="10"
+                        android:hint="Nr Packs"
+                        android:inputType="number"
+                        android:text="6"
+                        android:textColor="@color/offWhite"
+                        app:layout_constraintStart_toEndOf="@+id/txtBetTurn2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/btnPlaceBet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Place Bet" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
