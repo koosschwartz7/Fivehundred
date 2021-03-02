@@ -21,147 +21,231 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="130sp"
-            android:orientation="vertical"
-            android:padding="5sp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/black_overlay"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtTeam1Score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Team 1: 0"
-                    android:textColor="@color/colorAccent" />
-
-                <TextView
-                    android:id="@+id/txtTeam2Score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Team 2: 0"
-                    android:textColor="@color/colorAccent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/black_overlay"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtTeam1Packs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Packs: 0"
-                    android:textColor="@color/colorAccent" />
-
-                <TextView
-                    android:id="@+id/txtTeam2Packs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Packs: 0"
-                    android:textColor="@color/colorAccent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/txtBet"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Current Bet:"
-                    android:textColor="@color/offWhite" />
-
-                <TextView
-                    android:id="@+id/txtGameID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
-                    android:layout_weight="1"
-                    android:text="Game ID: XYZ"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/offWhite" />
-            </LinearLayout>
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/llBettingScreen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="20sp"
-                android:layout_marginBottom="20sp"
-                android:background="@color/black_overlay"
+                android:layout_margin="8dp"
                 android:orientation="vertical"
-                android:padding="5sp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
-                    android:id="@+id/txtBet2"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtBettingScreenTitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:layout_margin="5sp"
                     android:layout_weight="1"
-                    android:text="It's player X's turn to bet"
+                    android:text="Betting Time!"
+                    android:textColor="@color/offWhite"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtBettingScreenTitle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:text="Choose the trump suit and place bets on how many packs your team will take this round."
                     android:textAlignment="center"
                     android:textColor="@color/offWhite" />
 
-                <LinearLayout
+                <TableLayout
+                    android:id="@+id/tblBetHistory"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal">
+                    android:background="@color/black_overlay">
 
-                    <Spinner
-                        android:id="@+id/spinner"
-                        style="@android:style/Widget.Spinner.DropDown"
-                        android:layout_width="100sp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@color/offWhite"
-                        android:entries="@array/betValues"
-                        android:textColor="@color/offWhite" />
+                    <TableRow
+                        android:id="@+id/tblrBetHistoryHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/txtOf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
-                        android:text="Of"
-                        android:textColor="@color/offWhite" />
+                        <LinearLayout
+                            android:id="@+id/llTeam1Bets"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <Spinner
-                        android:id="@+id/spinner2"
-                        style="@android:style/Widget.Spinner.DropDown"
+                            <TextView
+                                android:id="@+id/txtBettingScreenTitle3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Team 1"
+                                android:textColor="@color/offWhite"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llTeam2Bets"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txtBettingScreenTitle4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Team 2"
+                                android:textColor="@color/offWhite"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </TableRow>
+
+                </TableLayout>
+
+                <TextView
+                    android:id="@+id/txtCurrentBet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:text="Current Bet: -"
+                    android:textColor="@color/offWhite" />
+
+                <TextView
+                    android:id="@+id/txtBetTurn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5sp"
+                    android:layout_weight="1"
+                    android:text="It's Player 1's turn to bet"
+                    android:textColor="@color/offWhite" />
+
+                <LinearLayout
+                    android:id="@+id/llPlaceBetScreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_overlay"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <Button
+                        android:id="@+id/btnPass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/offWhite"
-                        android:entries="@array/betSuites" />
+                        android:text="PASS" />
 
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="OR"
+                        android:textAlignment="center"
+                        android:textColor="@color/offWhite" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+                    <RadioGroup
+                        android:id="@+id/rgrpBetSuit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:id="@+id/btnSpades"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/offWhite"
+                            android:checked="true"
+                            android:text="Spades"
+                            android:textColor="@color/offWhite" />
+
+                        <RadioButton
+                            android:id="@+id/btnClubs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/offWhite"
+                            android:text="Clubs"
+                            android:textColor="@color/offWhite" />
+
+                        <RadioButton
+                            android:id="@+id/btnDiamonds"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/offWhite"
+                            android:text="Diamonds"
+                            android:textColor="@color/offWhite" />
+
+                        <RadioButton
+                            android:id="@+id/btnHearts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/offWhite"
+                            android:text="Hearts"
+                            android:textColor="@color/offWhite" />
+
+                        <RadioButton
+                            android:id="@+id/btnNoTrumps"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:buttonTint="@color/offWhite"
+                            android:text="No Trumps"
+                            android:textColor="@color/offWhite" />
+                    </RadioGroup>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/txtBetTurn2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="Number of packs: "
+                            android:textColor="@color/offWhite"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <EditText
+                            android:id="@+id/edtBetNrPacks"
+                            style="@android:style/Widget.Material.Light.EditText"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:ems="10"
+                            android:hint="Nr Packs"
+                            android:inputType="number"
+                            android:text="6"
+                            android:textColor="@color/offWhite"
+                            app:layout_constraintStart_toEndOf="@+id/txtBetTurn2"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/txtScorePrediction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="5sp"
+                            android:layout_weight="1"
+                            android:text="(Score: 40)"
+                            android:textColor="@color/offWhite"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/edtBetNrPacks"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <Button
                         android:id="@+id/btnPlaceBet"
@@ -170,154 +254,234 @@
                         android:layout_weight="1"
                         android:text="Place Bet" />
 
-                    <Button
-                        android:id="@+id/btnPass"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Pass" />
-
                 </LinearLayout>
-
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llPlayingScreen"
+                android:id="@+id/llGameScreen"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/black_overlay"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="130sp"
                 android:orientation="vertical"
-                android:padding="5sp">
-
+                android:padding="5sp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/black_overlay"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                    <TextView
+                        android:id="@+id/txtTeam1Score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:text="Team 1: 0"
+                        android:textColor="@color/colorAccent" />
 
-                        <TextView
-                            android:id="@+id/txtPlay1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
-                            android:layout_weight="1"
-                            android:text="Player 1"
-                            android:textAlignment="center"
-                            android:textColor="@color/offWhite" />
-
-                        <ImageView
-                            android:id="@+id/imgPlay1"
-                            android:layout_width="100dp"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:background="@color/offWhite"
-                            android:contentDescription="Turn 1"
-                            app:srcCompat="@drawable/back" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                    <TextView
+                        android:id="@+id/txtTeam2Score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
                         android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txtPlay2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
-                            android:layout_weight="1"
-                            android:text="Player 2"
-                            android:textAlignment="center"
-                            android:textColor="@color/offWhite" />
-
-                        <ImageView
-                            android:id="@+id/imgPlay2"
-                            android:layout_width="100dp"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:background="@color/offWhite"
-                            android:contentDescription="Turn 2"
-                            app:srcCompat="@drawable/back" />
-                    </LinearLayout>
-
+                        android:text="Team 2: 0"
+                        android:textColor="@color/colorAccent" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5sp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/black_overlay"
                     android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtTeam1Packs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Packs: 0"
+                        android:textColor="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/txtTeam2Packs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Packs: 0"
+                        android:textColor="@color/colorAccent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtBet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Current Bet:"
+                        android:textColor="@color/offWhite" />
+
+                    <TextView
+                        android:id="@+id/txtGameID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Game ID: XYZ"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/offWhite" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llPlayingScreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/black_overlay"
+                    android:orientation="vertical"
+                    android:padding="5sp">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/txtPlay3"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="Player 3"
-                            android:textAlignment="center"
-                            android:textColor="@color/offWhite" />
+                            android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgPlay3"
-                            android:layout_width="100dp"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center"
+                            <TextView
+                                android:id="@+id/txtPlay1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Player 1"
+                                android:textAlignment="center"
+                                android:textColor="@color/offWhite" />
+
+                            <ImageView
+                                android:id="@+id/imgPlay1"
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@color/offWhite"
+                                android:contentDescription="Turn 1"
+                                app:srcCompat="@drawable/back" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="@color/offWhite"
-                            android:contentDescription="Turn 1"
-                            app:srcCompat="@drawable/back" />
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txtPlay2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Player 2"
+                                android:textAlignment="center"
+                                android:textColor="@color/offWhite" />
+
+                            <ImageView
+                                android:id="@+id/imgPlay2"
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@color/offWhite"
+                                android:contentDescription="Turn 2"
+                                app:srcCompat="@drawable/back" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5sp"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/txtPlay4"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="5sp"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="Player 4"
-                            android:textAlignment="center"
-                            android:textColor="@color/offWhite" />
+                            android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/imgPlay4"
-                            android:layout_width="100dp"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center"
+                            <TextView
+                                android:id="@+id/txtPlay3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Player 3"
+                                android:textAlignment="center"
+                                android:textColor="@color/offWhite" />
+
+                            <ImageView
+                                android:id="@+id/imgPlay3"
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@color/offWhite"
+                                android:contentDescription="Turn 1"
+                                app:srcCompat="@drawable/back" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:background="@color/offWhite"
-                            android:contentDescription="Turn 2"
-                            app:srcCompat="@drawable/back" />
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txtPlay4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5sp"
+                                android:layout_weight="1"
+                                android:text="Player 4"
+                                android:textAlignment="center"
+                                android:textColor="@color/offWhite" />
+
+                            <ImageView
+                                android:id="@+id/imgPlay4"
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:background="@color/offWhite"
+                                android:contentDescription="Turn 2"
+                                app:srcCompat="@drawable/back" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 

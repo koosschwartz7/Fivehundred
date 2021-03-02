@@ -16,7 +16,8 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
             Pack(player1, player2, player3, player4)
     )
     var bet:Bet = Bet(Suit.NULLSUIT, players[nextBettingPlayerIndex], 99)
-    var initialBettingPlayerIndex:Int = nextBettingPlayerIndex;
+    var initialBettingPlayerIndex:Int = nextBettingPlayerIndex
+    var state = RoundState.BETTING
 
     fun dealHand(deck: Deck) {
         for (p in players) {
