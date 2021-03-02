@@ -2,23 +2,29 @@ package za.co.kschwartz.fivehundreds
 
 import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
 import android.provider.Settings
+import android.text.Editable
+import android.util.Log
+import android.view.View
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.activity_game.containerPlayerHand
 import kotlinx.android.synthetic.main.activity_game.txtGameID
 import kotlinx.android.synthetic.main.activity_lobby.*
+import kotlinx.android.synthetic.main.bet_history_instance.view.*
 import kotlinx.android.synthetic.main.player_card.view.*
-import za.co.kschwartz.fivehundreds.domain.Match
-import za.co.kschwartz.fivehundreds.domain.Player
-import za.co.kschwartz.fivehundreds.domain.Round
-import za.co.kschwartz.fivehundreds.domain.Suit
+import za.co.kschwartz.fivehundreds.domain.*
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
 import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
 import za.co.kschwartz.fivehundreds.network.ResponseReceiver
+import java.lang.NumberFormatException
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -34,7 +40,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     var multiplayerCommunicator: MultiplayerCommunicator = FirebaseCommunicator(this)
     var match = Match()
     var uid = "undetermined"
-
+    var player = Player()
+    var currentRound = Round()
 
     private var isFullscreen: Boolean = false
 
@@ -49,8 +56,6 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
         uid = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
         gameId = intent.getStringExtra("GAMEID").toString()
-        teamNr = intent.getIntExtra("TEAMNR", 99)
-        playerNr = intent.getIntExtra("PLAYERNR", 99)
 
         if (gameId != null) {
             multiplayerCommunicator.joinMatch(gameId, getDisplayName())
@@ -88,8 +93,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     override fun joinMatchSuccess(match: Match) {
-        //TODO: rejoin functionality
         this.match = match
+        player = determinePlayer(match)
         txtGameID.text = match.uniqueMatchCode
     }
 
@@ -111,9 +116,6 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         val team1 = match.teams["Team 1"]
         val team2 = match.teams["Team 2"]
         val player1 = team1?.players!!["Player 1"]
-        val player2 = team1?.players!!["Player 2"]
-        val player3 = team2?.players!!["Player 1"]
-        val player4 = team2?.players!!["Player 2"]
 
         var round: Round? = null
         try {
@@ -122,18 +124,12 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             println("Fresh game, starting new round.")
         }
 
+        txtTeam1Score.text = "Team 1:" + team1.score.toString()
+        txtTeam2Score.text = "Team 2:" + team2?.score.toString()
+
         if (round!=null) {
-            val player = determinePlayer(round)
-
-            txtTeam1Score.text = "Team 1:"+round.getTotalScoreForTeam(1)
-            txtTeam2Score.text = "Team 2:"+round.getTotalScoreForTeam(2)
-            txtTeam1Packs.text = "Packs:"+round.getNrOfPacksTakenForTeam(1)
-            txtTeam2Packs.text = "Packs:"+round.getNrOfPacksTakenForTeam(2)
-
-            txtPlay1.text = round.players[0].name
-            txtPlay2.text = round.players[1].name
-            txtPlay3.text = round.players[2].name
-            txtPlay4.text = round.players[3].name
+            currentRound = round
+            player = determinePlayer(round)
 
             for (card in player.hand) {
                 val cardLayout = this.layoutInflater.inflate(R.layout.player_card, null)
@@ -141,10 +137,24 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                 containerPlayerHand.addView(cardLayout)
             }
 
-            if (round.bet.trumpSuit == Suit.NULLSUIT) {
-                txtBet.text = "Current Bet:"
-            } else {
-                txtBet.text = "Current Bet:"+round.bet.nrPacks+" of "+round.bet.getTrumpTitle()
+            if (round.state == RoundState.BETTING) {
+                llBettingScreen.visibility = View.VISIBLE
+                llGameScreen.visibility = View.GONE
+                setBettingScreenValues(round)
+            } else if (round.state == RoundState.PLAYING) {
+                llBettingScreen.visibility = View.GONE
+                llGameScreen.visibility = View.VISIBLE
+                setGameScreenValues(round)
+            } else if (round.state == RoundState.FINISHED) {
+                llBettingScreen.visibility = View.GONE
+                llGameScreen.visibility = View.GONE
+                if (team1.score < 500 && team2?.score!! < 500) {
+                    if (uid == player1!!.uniqueID) {
+                        multiplayerCommunicator.startNewRound()
+                    }
+                } else {
+                    //TODO: Match finished screen
+                }
             }
 
         } else if (uid == player1!!.uniqueID) {
@@ -152,12 +162,117 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         }
     }
 
-    fun determinePlayer(round:Round):Player {
+    private fun setBettingScreenValues(round: Round) {
+        val nextBettingPlayer = round.getNextBettingPlayer()
+
+        for (i in 1 until tblBetHistory.childCount) {
+            tblBetHistory.removeViewAt(i)
+        }
+        for (bet in round.betHistory) {
+            addBetHistoryRow(bet)
+        }
+
+        txtCurrentBet.text = round.bet.callingPlayer.name + "(T"+round.bet.callingPlayer.team+") - "+ round.bet.getBetDescription()
+
+        if (nextBettingPlayer.uniqueID == uid) {
+            txtBetTurn.text = "It's YOUR TURN to bet:"
+            llPlaceBetScreen.visibility = View.VISIBLE
+            var minimumAllowedBet = round.getMinimumAllowedBetForSuit(Suit.SPADE, nextBettingPlayer)
+            btnSpades.isChecked = true
+            edtBetNrPacks.setText(minimumAllowedBet.nrPacks.toString())
+        } else {
+            txtBetTurn.text = "It's "+nextBettingPlayer.name+"'s turn to bet..."
+            llPlaceBetScreen.visibility = View.GONE
+        }
+    }
+
+    private fun addBetHistoryRow(bet: Bet) {
+        val betHistoryInst = this.layoutInflater.inflate(R.layout.bet_history_instance, null)
+        val betDesc = bet.callingPlayer.name + " calls " + bet.nrPacks + " of " + bet.getTrumpTitle()
+        if (bet.callingPlayer.team == 1) {
+            betHistoryInst.txtTeam1Bet.text = betDesc
+        } else {
+            betHistoryInst.txtTeam1Bet.text = betDesc
+        }
+        tblBetHistory.addView(betHistoryInst)
+    }
+
+    private fun setGameScreenValues(round: Round) {
+        txtTeam1Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(1)
+        txtTeam2Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(2)
+
+        txtPlay1.text = round.players[0].name
+        txtPlay2.text = round.players[1].name
+        txtPlay3.text = round.players[2].name
+        txtPlay4.text = round.players[3].name
+
+        if (round.bet.trumpSuit == Suit.NULLSUIT) {
+            txtBet.text = "Current Bet:"
+        } else {
+            txtBet.text = "Current Bet:" + round.bet.nrPacks + " of " + round.bet.getTrumpTitle()
+        }
+    }
+
+    private fun determinePlayer(round:Round):Player {
             for (player in round.players) {
                 if (player.uniqueID == uid) {
                     return player
                 }
             }
         return Player()
+    }
+
+    private fun determinePlayer(match:Match):Player {
+        for (team in match.teams.values) {
+            for (player in team.players.values) {
+                if (player.uniqueID == uid) {
+                    return player
+                }
+            }
+        }
+        return Player()
+    }
+
+    fun btnPassClicked(view: View) {
+        val passBet = Bet(Suit.NULLSUIT, player, 6)
+        currentRound.placeBet(getBetFromPlayerInput())
+    }
+
+    fun btnPlaceBetClicked(view: View) {
+        try {
+            currentRound.placeBet(getBetFromPlayerInput())
+        } catch (e: SuitBetNotAllowedException) {
+            val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+            builder.setMessage(e.message)
+                .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .show()
+        }
+    }
+
+    private fun getBetFromPlayerInput(): Bet {
+        var suit = Suit.NULLSUIT
+        when {
+            btnSpades.isChecked -> {
+                suit = Suit.SPADE
+            }
+            btnClubs.isChecked -> {
+                suit = Suit.CLUB
+            }
+            btnDiamonds.isChecked -> {
+                suit = Suit.DIAMOND
+            }
+            btnNoTrumps.isChecked -> {
+                suit = Suit.JOKER
+            }
+        }
+        var nrPacks = 6
+        try {
+            nrPacks = Integer.parseInt(edtBetNrPacks.text.toString())
+        } catch (e: NumberFormatException) {
+            Log.println(Log.WARN, "PlaceBet", "Unable to parse input for nrOfPacks ["+edtBetNrPacks.text.toString()+"] - defaulting to 6")
+        }
+        return Bet(suit, player, nrPacks)
     }
 }

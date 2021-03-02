@@ -16,6 +16,7 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
             Pack(player1, player2, player3, player4)
     )
     var bet:Bet = Bet(Suit.NULLSUIT, players[nextBettingPlayerIndex], 99)
+    var betHistory = arrayListOf<Bet>()
     var initialBettingPlayerIndex:Int = nextBettingPlayerIndex
     var state = RoundState.BETTING
 
@@ -43,6 +44,7 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     fun placeBet(newBet: Bet): Boolean {
         if (mayPlaceBet(newBet)) {
             bet = newBet
+            betHistory.add(bet)
             return true
         }
         return false
@@ -56,8 +58,16 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     fun getMinimumAllowedBetForSuit(suit: Suit, callingPlayer: Player): Bet {
         val minimumBet: Bet = Bet(suit, callingPlayer)
 
-        if (suit.equals(Suit.NULLSUIT)) {
-            throw SuitBetNotAllowedException(Suit.NULLSUIT.title + " is not allowed as a bet!")
+        //Betting a NULLSUIT bet is used as passing (not betting)
+        if (suit == Suit.NULLSUIT) {
+            if (callingPlayer.uniqueID == players[0].uniqueID) {
+                for (bet in betHistory) {
+                    if (bet.trumpSuit == Suit.NULLSUIT && bet.callingPlayer.uniqueID == callingPlayer.uniqueID) {
+                        throw SuitBetNotAllowedException("You are only allowed to pass once.")
+                    }
+                }
+            }
+            minimumBet.nrPacks = 5
         }
 
         if (bet.trumpSuit.equals(Suit.NULLSUIT)) {

@@ -7,4 +7,8 @@ data class Bet(val trumpSuit: Suit = Suit.NULLSUIT, val callingPlayer: Player = 
         }
         return trumpSuit.title
     }
+
+    fun getBetDescription():String {
+        return "$nrPacks of "+getTrumpTitle()
+    }
 }
