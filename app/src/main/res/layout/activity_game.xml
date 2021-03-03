@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,20 +9,18 @@
     android:foregroundTint="@color/offWhite"
     tools:context=".GameActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-
-    <!-- This FrameLayout insets its children based on system windows using
-         android:fitsSystemWindows. -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="130dp">
 
             <LinearLayout
                 android:id="@+id/llBettingScreen"
@@ -135,14 +134,15 @@
                     android:layout_weight="1"
                     android:background="@color/black_overlay"
                     android:orientation="vertical"
-                    android:padding="6dp">
+                    android:padding="6dp"
+                    android:visibility="gone">
 
                     <Button
                         android:id="@+id/btnPass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PASS"
-                        android:onClick="btnPassClicked"/>
+                        android:onClick="btnPassClicked"
+                        android:text="PASS" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -166,7 +166,8 @@
                             android:buttonTint="@color/offWhite"
                             android:checked="true"
                             android:text="Spades"
-                            android:textColor="@color/offWhite" />
+                            android:textColor="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked"/>
 
                         <RadioButton
                             android:id="@+id/btnClubs"
@@ -174,7 +175,8 @@
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
                             android:text="Clubs"
-                            android:textColor="@color/offWhite" />
+                            android:textColor="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked" />
 
                         <RadioButton
                             android:id="@+id/btnDiamonds"
@@ -182,7 +184,8 @@
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
                             android:text="Diamonds"
-                            android:textColor="@color/offWhite" />
+                            android:textColor="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked" />
 
                         <RadioButton
                             android:id="@+id/btnHearts"
@@ -190,7 +193,8 @@
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
                             android:text="Hearts"
-                            android:textColor="@color/offWhite" />
+                            android:textColor="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked" />
 
                         <RadioButton
                             android:id="@+id/btnNoTrumps"
@@ -198,7 +202,8 @@
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
                             android:text="No Trumps"
-                            android:textColor="@color/offWhite" />
+                            android:textColor="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked" />
                     </RadioGroup>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -253,8 +258,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Place Bet"
-                        android:onClick="btnPlaceBetClicked"/>
+                        android:onClick="btnPlaceBetClicked"
+                        android:text="Place Bet" />
 
                 </LinearLayout>
 
@@ -488,9 +493,12 @@
     </ScrollView>
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -518,4 +526,4 @@
 
     </FrameLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

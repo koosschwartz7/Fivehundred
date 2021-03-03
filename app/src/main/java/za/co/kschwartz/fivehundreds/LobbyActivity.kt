@@ -140,7 +140,7 @@ class LobbyActivity : AppCompatActivity(), ResponseReceiver {
         } else {
             playerNr = match.getNextAvailablePlayerNr()
             teamNr = match.getNextAvailTeamNr()
-            val player = Player(getDisplayName(), teamNr, playerNr, uid)
+            val player = Player(getDisplayName()+playerNr.toString(), teamNr, playerNr, uid)
             multiplayerCommunicator.switchPlayerSlot(playerNr, player)
         }
 

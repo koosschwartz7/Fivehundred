@@ -1,9 +1,6 @@
 package za.co.kschwartz.fivehundreds.network
 
-import za.co.kschwartz.fivehundreds.domain.Bet
-import za.co.kschwartz.fivehundreds.domain.Card
-import za.co.kschwartz.fivehundreds.domain.Match
-import za.co.kschwartz.fivehundreds.domain.Player
+import za.co.kschwartz.fivehundreds.domain.*
 
 interface MultiplayerCommunicator {
 
@@ -23,9 +20,7 @@ interface MultiplayerCommunicator {
 
     fun startNewRound()
 
-    fun placeBet(bet: Bet)
-
-    fun passBet()
+    fun placeBet(round: Round, bet: Bet)
 
     fun playCard(card: Card)
 

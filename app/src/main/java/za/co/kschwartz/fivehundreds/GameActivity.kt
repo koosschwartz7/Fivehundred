@@ -131,6 +131,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             currentRound = round
             player = determinePlayer(round)
 
+            containerPlayerHand.removeAllViews()
             for (card in player.hand) {
                 val cardLayout = this.layoutInflater.inflate(R.layout.player_card, null)
                 cardLayout.imgCard.setImageResource(card.imgResId)
@@ -166,13 +167,17 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         val nextBettingPlayer = round.getNextBettingPlayer()
 
         for (i in 1 until tblBetHistory.childCount) {
-            tblBetHistory.removeViewAt(i)
+            tblBetHistory.removeViewAt(1)
         }
         for (bet in round.betHistory) {
             addBetHistoryRow(bet)
         }
 
-        txtCurrentBet.text = round.bet.callingPlayer.name + "(T"+round.bet.callingPlayer.team+") - "+ round.bet.getBetDescription()
+        var betText = "Current bet: "+round.bet.callingPlayer.name + "(T"+round.bet.callingPlayer.team+") - "+ round.bet.getBetDescription()
+        if (round.bet.trumpSuit == Suit.NULLSUIT) {
+            betText = "Current bet: -"
+        }
+        txtCurrentBet.text = betText
 
         if (nextBettingPlayer.uniqueID == uid) {
             txtBetTurn.text = "It's YOUR TURN to bet:"
@@ -188,7 +193,11 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
     private fun addBetHistoryRow(bet: Bet) {
         val betHistoryInst = this.layoutInflater.inflate(R.layout.bet_history_instance, null)
-        val betDesc = bet.callingPlayer.name + " calls " + bet.nrPacks + " of " + bet.getTrumpTitle()
+        var betDesc = bet.callingPlayer.name + " called " + bet.nrPacks + " of " + bet.getTrumpTitle()
+        if (bet.trumpSuit == Suit.NULLSUIT) {
+            betDesc = bet.callingPlayer.name + " passed."
+        }
+
         if (bet.callingPlayer.team == 1) {
             betHistoryInst.txtTeam1Bet.text = betDesc
         } else {
@@ -235,12 +244,21 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
     fun btnPassClicked(view: View) {
         val passBet = Bet(Suit.NULLSUIT, player, 6)
-        currentRound.placeBet(getBetFromPlayerInput())
+        try {
+            multiplayerCommunicator.placeBet(currentRound, passBet)
+        } catch (e: SuitBetNotAllowedException) {
+            val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+            builder.setMessage(e.message)
+                .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .show()
+        }
     }
 
     fun btnPlaceBetClicked(view: View) {
         try {
-            currentRound.placeBet(getBetFromPlayerInput())
+            multiplayerCommunicator.placeBet(currentRound, getBetFromPlayerInput())
         } catch (e: SuitBetNotAllowedException) {
             val builder: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
             builder.setMessage(e.message)
@@ -263,6 +281,9 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             btnDiamonds.isChecked -> {
                 suit = Suit.DIAMOND
             }
+            btnHearts.isChecked -> {
+                suit = Suit.HEART
+            }
             btnNoTrumps.isChecked -> {
                 suit = Suit.JOKER
             }
@@ -274,5 +295,14 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             Log.println(Log.WARN, "PlaceBet", "Unable to parse input for nrOfPacks ["+edtBetNrPacks.text.toString()+"] - defaulting to 6")
         }
         return Bet(suit, player, nrPacks)
+    }
+
+    fun btnSuitSelectClicked(view: View) {
+        estimateWinningScoreForUserInput()
+    }
+
+    private fun estimateWinningScoreForUserInput() {
+        val bet = getBetFromPlayerInput()
+        txtScorePrediction.text = (bet.trumpSuit.trumpWeight + ((bet.nrPacks -6)*50)).toString()
     }
 }

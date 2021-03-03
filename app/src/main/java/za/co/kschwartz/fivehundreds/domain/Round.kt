@@ -45,6 +45,7 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
         if (mayPlaceBet(newBet)) {
             bet = newBet
             betHistory.add(bet)
+            incrementNextBettingPlayerIndex()
             return true
         }
         return false
@@ -60,11 +61,9 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
 
         //Betting a NULLSUIT bet is used as passing (not betting)
         if (suit == Suit.NULLSUIT) {
-            if (callingPlayer.uniqueID == players[0].uniqueID) {
-                for (bet in betHistory) {
-                    if (bet.trumpSuit == Suit.NULLSUIT && bet.callingPlayer.uniqueID == callingPlayer.uniqueID) {
-                        throw SuitBetNotAllowedException("You are only allowed to pass once.")
-                    }
+            if (callingPlayer.uniqueID == players[0].uniqueID && bet.trumpSuit == Suit.NULLSUIT && betHistory.size > 0) {
+                if (betHistory[0].trumpSuit == Suit.NULLSUIT && betHistory[0].callingPlayer.uniqueID == callingPlayer.uniqueID) {
+                    throw SuitBetNotAllowedException("You are only allowed to pass once.")
                 }
             }
             minimumBet.nrPacks = 5
@@ -94,9 +93,7 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     }
 
     fun getNextBettingPlayer():Player {
-        val nextBettingPlayer:Player = players[nextBettingPlayerIndex]
-        incrementNextBettingPlayerIndex();
-        return nextBettingPlayer
+        return players[nextBettingPlayerIndex]
     }
 
     fun generateNextPackPlayOrder() {
