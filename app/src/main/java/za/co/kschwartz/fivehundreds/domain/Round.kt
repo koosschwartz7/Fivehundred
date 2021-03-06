@@ -19,8 +19,10 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     var betHistory = arrayListOf<Bet>()
     var initialBettingPlayerIndex:Int = nextBettingPlayerIndex
     var state = RoundState.BETTING
+    var deck: FivehundredDeck? = null
 
-    fun dealHand(deck: Deck) {
+    fun dealHand(deck: FivehundredDeck) {
+        this.deck = deck
         for (p in players) {
             p.hand.clear()
             for (i in 0..9) {
@@ -42,7 +44,11 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
     }
 
     fun placeBet(newBet: Bet): Boolean {
-        if (mayPlaceBet(newBet)) {
+        if (newBet.trumpSuit == Suit.NULLSUIT) {
+            betHistory.add(newBet)
+            incrementNextBettingPlayerIndex()
+            return true
+        } else if (mayPlaceBet(newBet)) {
             bet = newBet
             betHistory.add(bet)
             incrementNextBettingPlayerIndex()
@@ -82,6 +88,24 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
         }
 
         return minimumBet
+    }
+
+    fun allOtherPlayersHavePassed():Boolean {
+        if (bet.trumpSuit != Suit.NULLSUIT) {
+            var passes = -1
+            for (hBet in betHistory) {
+                if (hBet.callingPlayer.uniqueID == bet.callingPlayer.uniqueID && hBet.nrPacks == bet.nrPacks && hBet.trumpSuit == bet.trumpSuit) {
+                    passes = 0
+                }
+                if (hBet.trumpSuit == Suit.NULLSUIT) {
+                    passes ++
+                    if (passes >=3) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
     }
 
     fun incrementNextBettingPlayerIndex():Int {

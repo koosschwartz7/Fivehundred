@@ -131,12 +131,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             currentRound = round
             player = determinePlayer(round)
 
-            containerPlayerHand.removeAllViews()
-            for (card in player.hand) {
-                val cardLayout = this.layoutInflater.inflate(R.layout.player_card, null)
-                cardLayout.imgCard.setImageResource(card.imgResId)
-                containerPlayerHand.addView(cardLayout)
-            }
+            populatePlayerHandContainer()
 
             if (round.state == RoundState.BETTING) {
                 llBettingScreen.visibility = View.VISIBLE
@@ -163,8 +158,27 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         }
     }
 
+    private fun populatePlayerHandContainer() {
+        containerPlayerHand.removeAllViews()
+        for (card in player.hand) {
+            val cardLayout = this.layoutInflater.inflate(R.layout.player_card, null)
+            cardLayout.imgCard.setImageResource(card.imgResId)
+            cardLayout.setOnClickListener(View.OnClickListener {
+                if (currentRound.state == RoundState.BETTING && currentRound.allOtherPlayersHavePassed() && currentRound.bet.callingPlayer.uniqueID == uid) {
+                    currentRound.deck!!.cards.add(card)
+                    player.hand.remove(card)
+                    checkRoundStartable()
+                } else if (currentRound.state == RoundState.PLAYING) {
+                    //TODO: Play card
+                }
+                populatePlayerHandContainer()
+                populateKittyContainer(currentRound)
+            })
+            containerPlayerHand.addView(cardLayout)
+        }
+    }
+
     private fun setBettingScreenValues(round: Round) {
-        val nextBettingPlayer = round.getNextBettingPlayer()
 
         for (i in 1 until tblBetHistory.childCount) {
             tblBetHistory.removeViewAt(1)
@@ -179,15 +193,55 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         }
         txtCurrentBet.text = betText
 
-        if (nextBettingPlayer.uniqueID == uid) {
-            txtBetTurn.text = "It's YOUR TURN to bet:"
-            llPlaceBetScreen.visibility = View.VISIBLE
-            var minimumAllowedBet = round.getMinimumAllowedBetForSuit(Suit.SPADE, nextBettingPlayer)
-            btnSpades.isChecked = true
-            edtBetNrPacks.setText(minimumAllowedBet.nrPacks.toString())
-        } else {
-            txtBetTurn.text = "It's "+nextBettingPlayer.name+"'s turn to bet..."
+        if (round.allOtherPlayersHavePassed()) {
             llPlaceBetScreen.visibility = View.GONE
+            txtBetTurn.text = "Waiting for "+round.bet.callingPlayer.name+" to start the round"
+            if (round.bet.callingPlayer.uniqueID == uid) {
+                llKittyScreen.visibility = View.VISIBLE
+                populateKittyContainer(round)
+                checkRoundStartable()
+            }
+
+        } else {
+            llKittyScreen.visibility = View.GONE
+            val nextBettingPlayer = round.getNextBettingPlayer()
+            if (nextBettingPlayer.uniqueID == uid) {
+                txtBetTurn.text = "It's YOUR TURN to bet:"
+                llPlaceBetScreen.visibility = View.VISIBLE
+                var minimumAllowedBet =
+                    round.getMinimumAllowedBetForSuit(Suit.SPADE, nextBettingPlayer)
+                btnSpades.isChecked = true
+                edtBetNrPacks.setText(minimumAllowedBet.nrPacks.toString())
+            } else {
+                txtBetTurn.text = "It's " + nextBettingPlayer.name + "'s turn to bet..."
+                llPlaceBetScreen.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun populateKittyContainer(round: Round) {
+        llKittyContainer.removeAllViews()
+        for (card in round.deck!!.cards) {
+            val cardLayout = this.layoutInflater.inflate(R.layout.player_card, null)
+            cardLayout.imgCard.setImageResource(card.imgResId)
+            cardLayout.setOnClickListener(View.OnClickListener {
+                player.hand.add(card)
+                round.deck!!.cards.remove(card)
+                checkRoundStartable()
+                populateKittyContainer(round)
+                populatePlayerHandContainer()
+            })
+            llKittyContainer.addView(cardLayout)
+        }
+    }
+
+    private fun checkRoundStartable() {
+        if (player.hand.size != 10) {
+            txtStartMatchWarning.visibility = View.VISIBLE
+            btnStartRound.isEnabled = false
+        } else {
+            txtStartMatchWarning.visibility = View.INVISIBLE
+            btnStartRound.isEnabled = true
         }
     }
 
@@ -198,11 +252,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             betDesc = bet.callingPlayer.name + " passed."
         }
 
-        if (bet.callingPlayer.team == 1) {
-            betHistoryInst.txtTeam1Bet.text = betDesc
-        } else {
-            betHistoryInst.txtTeam1Bet.text = betDesc
-        }
+        betHistoryInst.txtTeam1Bet.text = betDesc
         tblBetHistory.addView(betHistoryInst)
     }
 
@@ -305,4 +355,9 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         val bet = getBetFromPlayerInput()
         txtScorePrediction.text = (bet.trumpSuit.trumpWeight + ((bet.nrPacks -6)*50)).toString()
     }
+
+    fun btnStartRoundClicked(view: View) {}
+    fun kittyCard1Clicked(view: View) {}
+    fun kittyCard2Clicked(view: View) {}
+    fun kittyCard3Clicked(view: View) {}
 }

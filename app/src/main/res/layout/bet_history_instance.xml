@@ -11,14 +11,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="5sp"
         android:layout_weight="1"
-        android:textColor="@color/offWhite" />
+        android:textColor="@color/offWhite"
+        android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/txtTeam2Bet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="5sp"
-        android:layout_weight="1"
-        android:textColor="@color/offWhite" />
 </TableRow>

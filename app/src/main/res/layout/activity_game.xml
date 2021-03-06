@@ -78,29 +78,11 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_margin="5sp"
                                 android:layout_weight="1"
-                                android:text="Team 1"
+                                android:text="Bet history"
                                 android:textColor="@color/offWhite"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/llTeam2Bets"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/txtBettingScreenTitle4"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_margin="5sp"
-                                android:layout_weight="1"
-                                android:text="Team 2"
-                                android:textColor="@color/offWhite"
-                                android:textStyle="bold" />
-                        </LinearLayout>
                     </TableRow>
 
                 </TableLayout>
@@ -260,6 +242,66 @@
                         android:layout_weight="1"
                         android:onClick="btnPlaceBetClicked"
                         android:text="Place Bet" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llKittyScreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_weight="1"
+                    android:background="@color/black_overlay"
+                    android:orientation="vertical"
+                    android:padding="6dp"
+                    android:visibility="visible">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="Swap cards from Kitty:"
+                        android:textAlignment="center"
+                        android:textColor="@color/offWhite" />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:id="@+id/llKittyContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="125dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/txtStartMatchWarning"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="5sp"
+                        android:layout_weight="1"
+                        android:text="You can only start the match with 10 cards in your hand"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/holo_orange_dark"
+                        android:textSize="12sp" />
+
+                    <Button
+                        android:id="@+id/btnStartRound"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Start Round"
+                        android:onClick="btnStartRoundClicked"/>
 
                 </LinearLayout>
 
