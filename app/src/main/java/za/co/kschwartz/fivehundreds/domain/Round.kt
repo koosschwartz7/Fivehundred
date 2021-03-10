@@ -152,10 +152,16 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
 
     fun getNextPackFirstPlayerIndex():Int {
         val lastPlayedPackIndex = getNextPlayablePackIndex() -1
+        var playerUid = bet.callingPlayer.uniqueID
         if (lastPlayedPackIndex > -1) {
-            return players.indexOf(packs[lastPlayedPackIndex].determineWinningTurn(bet.trumpSuit).player)
+            playerUid = packs[lastPlayedPackIndex].determineWinningTurn(bet.trumpSuit).player.uniqueID
         }
-        return players.indexOf(bet.callingPlayer);
+        for (index in players.indices) {
+            if (players[index].uniqueID == playerUid) {
+                return index
+            }
+        }
+        return -1
     }
 
     fun getTotalScoreForTeam(teamNr: Int): Int {

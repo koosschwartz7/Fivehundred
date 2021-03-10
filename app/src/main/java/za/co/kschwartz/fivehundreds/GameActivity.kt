@@ -42,6 +42,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     var uid = "undetermined"
     var player = Player()
     var currentRound = Round()
+    var currentPack = Pack()
+    var currentTurn = Turn()
 
     private var isFullscreen: Boolean = false
 
@@ -130,6 +132,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         if (round!=null) {
             currentRound = round
             player = determinePlayer(round)
+            currentPack = round.packs[round.getNextPlayablePackIndex()]
+            currentTurn = currentPack.getNextPlayableTurn()
 
             populatePlayerHandContainer()
 
@@ -168,8 +172,18 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                     currentRound.deck!!.cards.add(card)
                     player.hand.remove(card)
                     checkRoundStartable()
-                } else if (currentRound.state == RoundState.PLAYING) {
-                    //TODO: Play card
+                } else if (currentRound.state == RoundState.PLAYING && currentTurn.player.uniqueID == uid) {
+                    if (currentPack.mayPlayCard(player, card, currentRound.bet.trumpSuit)) {
+                        player.hand.remove(card)
+                        multiplayerCommunicator.playCard(currentTurn, card)
+                    } else {
+                        val builder = MaterialAlertDialogBuilder(this)
+                        builder.setMessage("You cannot play this card.")
+                            .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                dialogInterface.dismiss()
+                            })
+                            .show()
+                    }
                 }
                 populatePlayerHandContainer()
                 populateKittyContainer(currentRound)
@@ -356,8 +370,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         txtScorePrediction.text = (bet.trumpSuit.trumpWeight + ((bet.nrPacks -6)*50)).toString()
     }
 
-    fun btnStartRoundClicked(view: View) {}
-    fun kittyCard1Clicked(view: View) {}
-    fun kittyCard2Clicked(view: View) {}
-    fun kittyCard3Clicked(view: View) {}
+    fun btnStartRoundClicked(view: View) {
+        multiplayerCommunicator.startRound(currentRound)
+    }
 }

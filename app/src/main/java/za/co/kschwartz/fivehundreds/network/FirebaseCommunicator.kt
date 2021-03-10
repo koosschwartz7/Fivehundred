@@ -110,14 +110,23 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
         fbMatchNode.setValue(match)
     }
 
+    override fun startRound(round: Round) {
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+        round.generateNextPackPlayOrder()
+        round.state = RoundState.PLAYING
+        fbMatchNode.setValue(match)
+    }
+
     override fun placeBet(round: Round, bet: Bet) {
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         round.placeBet(bet)
         fbMatchNode.setValue(match)
     }
 
-    override fun playCard(card: Card) {
-        //TODO("Not yet implemented")
+    override fun playCard(turn: Turn, card: Card) {
+        turn.playedCard = card
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+        fbMatchNode.setValue(match)
     }
 
 }

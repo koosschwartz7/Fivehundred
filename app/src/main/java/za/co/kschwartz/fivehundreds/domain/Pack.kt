@@ -69,5 +69,32 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
         throw NoNextTurnException("All turns in this pack have been played.");
     }
 
+    //TODO: test
+    fun mayPlayCard(player: Player, card: Card, trumpSuit: Suit): Boolean {
+        var packSuit = turns[0].playedCard.suit
+        if (packSuit == Suit.JOKER) {
+            packSuit = trumpSuit
+        }
+
+        if (packSuit == Suit.NULLSUIT) {
+            return true
+        }
+
+        if (packSuit == card.suit) {
+            return true
+        }
+
+        if (packSuit != card.suit) {
+            for (c in player.hand) {
+                if (c.suit == packSuit) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        return false
+    }
+
 
 }

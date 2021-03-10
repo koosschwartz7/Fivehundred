@@ -20,8 +20,10 @@ interface MultiplayerCommunicator {
 
     fun startNewRound()
 
+    fun startRound(round: Round)
+
     fun placeBet(round: Round, bet: Bet)
 
-    fun playCard(card: Card)
+    fun playCard(turn: Turn, card: Card)
 
 }
