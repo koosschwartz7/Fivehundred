@@ -174,8 +174,17 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                     checkRoundStartable()
                 } else if (currentRound.state == RoundState.PLAYING && currentTurn.player.uniqueID == uid) {
                     if (currentPack.mayPlayCard(player, card, currentRound.bet.trumpSuit)) {
-                        player.hand.remove(card)
-                        multiplayerCommunicator.playCard(currentTurn, card)
+                        val builder = MaterialAlertDialogBuilder(this)
+                        builder.setMessage("Play "+card.getDisplayName()+"?")
+                            .setPositiveButton(R.string.dialog_yes_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                player.hand.remove(card)
+                                multiplayerCommunicator.playCard(currentTurn, card)
+                                dialogInterface.dismiss()
+                            })
+                            .setNegativeButton(R.string.dialog_no_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                dialogInterface.dismiss()
+                            })
+                            .show()
                     } else {
                         val builder = MaterialAlertDialogBuilder(this)
                         builder.setMessage("You cannot play this card.")
@@ -274,15 +283,31 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         txtTeam1Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(1)
         txtTeam2Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(2)
 
-        txtPlay1.text = round.players[0].name
-        txtPlay2.text = round.players[1].name
-        txtPlay3.text = round.players[2].name
-        txtPlay4.text = round.players[3].name
+        setPlayerLabelValues(round.players[0], txtPlay1)
+        setPlayerLabelValues(round.players[1], txtPlay2)
+        setPlayerLabelValues(round.players[2], txtPlay3)
+        setPlayerLabelValues(round.players[3], txtPlay4)
 
         if (round.bet.trumpSuit == Suit.NULLSUIT) {
             txtBet.text = "Current Bet:"
         } else {
             txtBet.text = "Current Bet:" + round.bet.nrPacks + " of " + round.bet.getTrumpTitle()
+        }
+
+        imgPlay1.setImageResource(currentPack.turns[0].playedCard.imgResId)
+        imgPlay2.setImageResource(currentPack.turns[1].playedCard.imgResId)
+        imgPlay3.setImageResource(currentPack.turns[2].playedCard.imgResId)
+        imgPlay4.setImageResource(currentPack.turns[3].playedCard.imgResId)
+
+
+    }
+
+    private fun setPlayerLabelValues(player: Player, textView: TextView) {
+        textView.text = player.name
+        if (currentTurn.player.uniqueID == player.uniqueID) {
+            textView.setTextColor(resources.getColor(R.color.brightGreen))
+        } else {
+            textView.setTextColor(resources.getColor(R.color.offWhite))
         }
     }
 
