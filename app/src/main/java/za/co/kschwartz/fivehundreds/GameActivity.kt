@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
 import android.provider.Settings
-import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.TableRow
@@ -133,7 +132,10 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             currentRound = round
             player = determinePlayer(round)
             currentPack = round.packs[round.getNextPlayablePackIndex()]
-            currentTurn = currentPack.getNextPlayableTurn()
+            if (currentPack.turns[0].playedCard.suit == Suit.NULLSUIT) {
+                currentRound.generateNextPackPlayOrder()
+            }
+            currentTurn = currentPack.nextPlayableTurn()
 
             populatePlayerHandContainer()
 
@@ -173,7 +175,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                     player.hand.remove(card)
                     checkRoundStartable()
                 } else if (currentRound.state == RoundState.PLAYING && currentTurn.player.uniqueID == uid) {
-                    if (currentPack.mayPlayCard(player, card, currentRound.bet.trumpSuit)) {
+                    if (currentPack.mayPlayCard(player, card, currentRound.bet.trumpSuit, Suit.SPADE)) {
                         val builder = MaterialAlertDialogBuilder(this)
                         builder.setMessage("Play "+card.getDisplayName()+"?")
                             .setPositiveButton(R.string.dialog_yes_button, DialogInterface.OnClickListener { dialogInterface, i ->

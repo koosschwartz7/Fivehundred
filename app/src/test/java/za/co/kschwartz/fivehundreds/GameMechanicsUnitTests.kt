@@ -255,13 +255,13 @@ class GameMechanicsUnitTests {
     fun allTurnsPlayedCorrectlyChecksAllPlayersPlayed() {
         var pack = Pack(Player("Jan", 1, 1), Player("Piet", 2, 2), Player("San", 1, 3),Player("Juan", 2, 4))
         assertFalse(pack.allTurnsPlayed())
-        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 10)
+        pack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 10)
         assertFalse(pack.allTurnsPlayed())
-        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 11)
+        pack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 11)
         assertFalse(pack.allTurnsPlayed())
-        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 12)
+        pack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 12)
         assertFalse(pack.allTurnsPlayed())
-        pack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 13)
+        pack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 13)
         assertTrue(pack.allTurnsPlayed())
     }
 
@@ -367,16 +367,16 @@ class GameMechanicsUnitTests {
     }
 
     fun playWinningPackForTeam(round: Round, packIndex: Int, teamNr: Int) {
-        val firstTurn = round.packs[packIndex].getNextPlayableTurn()
+        val firstTurn = round.packs[packIndex].nextPlayableTurn()
         if (firstTurn.player.team == teamNr) {
             firstTurn.playedCard = Card(Suit.SPADE, 14)
-            round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 8)
+            round.packs[packIndex].nextPlayableTurn().playedCard = Card(Suit.SPADE, 8)
         } else {
             firstTurn.playedCard = Card(Suit.SPADE, 8)
-            round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
+            round.packs[packIndex].nextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
         }
-        round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
-        round.packs[packIndex].getNextPlayableTurn().playedCard = Card(Suit.SPADE, 7)
+        round.packs[packIndex].nextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
+        round.packs[packIndex].nextPlayableTurn().playedCard = Card(Suit.SPADE, 7)
     }
 
     @Test
@@ -398,17 +398,17 @@ class GameMechanicsUnitTests {
         //Betting player is first player in a round.
         round.generateNextPackPlayOrder()
         var nextPlayablePack = round.packs[round.getNextPlayablePackIndex()]
-        assertEquals("Piet",nextPlayablePack.getNextPlayableTurn().player.name)
-        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
-        assertEquals("San",nextPlayablePack.getNextPlayableTurn().player.name)
-        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 5)
-        assertEquals("Juan",nextPlayablePack.getNextPlayableTurn().player.name)
-        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
-        assertEquals("Jan",nextPlayablePack.getNextPlayableTurn().player.name)
-        nextPlayablePack.getNextPlayableTurn().playedCard = Card(Suit.DIAMOND, 6)
+        assertEquals("Piet",nextPlayablePack.nextPlayableTurn().player.name)
+        nextPlayablePack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 14)
+        assertEquals("San",nextPlayablePack.nextPlayableTurn().player.name)
+        nextPlayablePack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 5)
+        assertEquals("Juan",nextPlayablePack.nextPlayableTurn().player.name)
+        nextPlayablePack.nextPlayableTurn().playedCard = Card(Suit.SPADE, 6)
+        assertEquals("Jan",nextPlayablePack.nextPlayableTurn().player.name)
+        nextPlayablePack.nextPlayableTurn().playedCard = Card(Suit.DIAMOND, 6)
 
         try {
-            nextPlayablePack.getNextPlayableTurn()
+            nextPlayablePack.nextPlayableTurn()
             assertTrue("This should throw an exception when all players have played.", false)
         } catch (e: NoNextTurnException) {
             assertEquals("All turns in this pack have been played.", e.message)
@@ -417,7 +417,7 @@ class GameMechanicsUnitTests {
         //Winning player starts next pack
         round.generateNextPackPlayOrder();
         nextPlayablePack = round.packs[round.getNextPlayablePackIndex()]
-        assertEquals("Jan",nextPlayablePack.getNextPlayableTurn().player.name)
+        assertEquals("Jan",nextPlayablePack.nextPlayableTurn().player.name)
     }
 
     @Test
@@ -457,7 +457,7 @@ class GameMechanicsUnitTests {
             for (i in 0..9) {
                 round.generateNextPackPlayOrder()
                 for (k in 0..3) {
-                    val nextPlayableTurn = round.packs[i].getNextPlayableTurn()
+                    val nextPlayableTurn = round.packs[i].nextPlayableTurn()
                     //Totally random, not checked for legality
                     val playCard = nextPlayableTurn.player.playCard(randInt(0, nextPlayableTurn.player.hand.size-1))
                     nextPlayableTurn.playedCard = playCard

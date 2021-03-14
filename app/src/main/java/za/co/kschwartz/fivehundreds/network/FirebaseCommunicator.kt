@@ -125,6 +125,16 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
 
     override fun playCard(turn: Turn, card: Card) {
         turn.playedCard = card
+
+        val round = match.rounds.last()
+        val nextPlayablePackIndex = round.getNextPlayablePackIndex()
+        if (nextPlayablePackIndex != -1) {
+            val pack = round.packs[nextPlayablePackIndex]
+            if (pack.turns[0].playedCard.suit == Suit.NULLSUIT) {
+                round.generateNextPackPlayOrder()
+            }
+        }
+
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         fbMatchNode.setValue(match)
     }

@@ -60,7 +60,7 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
         return allTurnsPlayed
     }
 
-    fun getNextPlayableTurn(): Turn {
+    fun nextPlayableTurn(): Turn {
         for (t in turns) {
             if (t.playedCard.suit == Suit.NULLSUIT) {
                 return t
@@ -70,13 +70,33 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
     }
 
     //TODO: test
-    fun mayPlayCard(player: Player, card: Card, trumpSuit: Suit): Boolean {
+    fun mayPlayCard(player: Player, card: Card, trumpSuit: Suit, noTrumpsJokerSuit: Suit): Boolean {
         var packSuit = turns[0].playedCard.suit
         if (packSuit == Suit.JOKER) {
-            packSuit = trumpSuit
+            if (trumpSuit != Suit.JOKER) {
+                packSuit = trumpSuit
+            } else {
+                packSuit = noTrumpsJokerSuit
+            }
+        }
+
+        if (turns[0].playedCard.value == 11 && trumpSuit != Suit.JOKER) {
+            if (trumpSuit == Suit.SPADE && turns[0].playedCard.suit == Suit.CLUB) {
+                packSuit = trumpSuit
+            } else if (trumpSuit == Suit.CLUB && turns[0].playedCard.suit == Suit.SPADE) {
+                packSuit = trumpSuit
+            } else if (trumpSuit == Suit.DIAMOND && turns[0].playedCard.suit == Suit.HEART) {
+                packSuit = trumpSuit
+            } else if (trumpSuit == Suit.HEART && turns[0].playedCard.suit == Suit.DIAMOND) {
+                packSuit = trumpSuit
+            }
         }
 
         if (packSuit == Suit.NULLSUIT) {
+            return true
+        }
+
+        if (trumpSuit != Suit.JOKER && packSuit == trumpSuit && card.isTrump(trumpSuit)) {
             return true
         }
 
