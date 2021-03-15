@@ -87,6 +87,10 @@ class Card(suit: Suit = Suit.NULLSUIT, value: Int = 0) {
     }
 
     fun isTrump(trumpSuit: Suit):Boolean {
+        if (suit == Suit.JOKER) {
+            return true
+        }
+
         if (trumpSuit.equals(Suit.SPADE)) {
             return suit.equals(Suit.SPADE) || (suit.equals(Suit.CLUB) && value == 11)
         } else if (trumpSuit.equals(Suit.CLUB)) {

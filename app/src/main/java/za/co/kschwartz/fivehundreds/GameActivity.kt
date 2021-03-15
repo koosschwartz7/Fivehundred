@@ -43,6 +43,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     var currentRound = Round()
     var currentPack = Pack()
     var currentTurn = Turn()
+    var currentPackIndex = 0
 
     private var isFullscreen: Boolean = false
 
@@ -131,11 +132,19 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         if (round!=null) {
             currentRound = round
             player = determinePlayer(round)
-            currentPack = round.packs[round.getNextPlayablePackIndex()]
-            if (currentPack.turns[0].playedCard.suit == Suit.NULLSUIT) {
-                currentRound.generateNextPackPlayOrder()
+            val nextPlayablePackIndex = round.getNextPlayablePackIndex()
+            if (nextPlayablePackIndex == -1) {
+
+            } else if (nextPlayablePackIndex != round.currentPackIndex) {
+                delayStartNextPack()
             }
-            currentTurn = currentPack.nextPlayableTurn()
+            //currentPack = round.packs[round.getNextPlayablePackIndex()]
+            currentPack = round.getCurrentPack()
+            if (currentPack.allTurnsPlayed()) {
+
+            } else {
+                currentTurn = currentPack.nextPlayableTurn()
+            }
 
             populatePlayerHandContainer()
 
@@ -162,6 +171,10 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         } else if (uid == player1!!.uniqueID) {
             multiplayerCommunicator.startNewRound()
         }
+    }
+
+    private fun delayStartNextPack() {
+        TODO("Not yet implemented")
     }
 
     private fun populatePlayerHandContainer() {
