@@ -117,6 +117,14 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
         fbMatchNode.setValue(match)
     }
 
+    override fun startNextPack(round: Round) {
+        if (round.currentPackIndex < 9) {
+            round.currentPackIndex++
+            val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+            fbMatchNode.setValue(match)
+        }
+    }
+
     override fun placeBet(round: Round, bet: Bet) {
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
         round.placeBet(bet)

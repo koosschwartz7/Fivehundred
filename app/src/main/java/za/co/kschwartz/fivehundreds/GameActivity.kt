@@ -1,29 +1,27 @@
 package za.co.kschwartz.fivehundreds
 
-import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.View
-import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_game.containerPlayerHand
-import kotlinx.android.synthetic.main.activity_game.txtGameID
-import kotlinx.android.synthetic.main.activity_lobby.*
 import kotlinx.android.synthetic.main.bet_history_instance.view.*
 import kotlinx.android.synthetic.main.player_card.view.*
 import za.co.kschwartz.fivehundreds.domain.*
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
 import za.co.kschwartz.fivehundreds.network.MultiplayerCommunicator
 import za.co.kschwartz.fivehundreds.network.ResponseReceiver
-import java.lang.NumberFormatException
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -122,7 +120,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         var round: Round? = null
         try {
             round = match.rounds.last()
-        } catch (e:NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
             println("Fresh game, starting new round.")
         }
 
@@ -134,14 +132,18 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             player = determinePlayer(round)
             val nextPlayablePackIndex = round.getNextPlayablePackIndex()
             if (nextPlayablePackIndex == -1) {
-
+                //TODO: Delay start next round?
             } else if (nextPlayablePackIndex != round.currentPackIndex) {
                 delayStartNextPack()
             }
             //currentPack = round.packs[round.getNextPlayablePackIndex()]
             currentPack = round.getCurrentPack()
             if (currentPack.allTurnsPlayed()) {
-
+                val winningTurn = currentPack.determineWinningTurn(round.bet.trumpSuit)
+                Toast.makeText(this,
+                        winningTurn.player.name + " (Team " + winningTurn.player.team + ") wins pack with " + winningTurn.playedCard.getDisplayName(),
+                        Toast.LENGTH_LONG)
+                        .show()
             } else {
                 currentTurn = currentPack.nextPlayableTurn()
             }
@@ -174,7 +176,11 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     private fun delayStartNextPack() {
-        TODO("Not yet implemented")
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (uid == match.teams["Team 1"]!!.players!!["Player 1"]!!.uniqueID) {
+                multiplayerCommunicator.startNextPack(currentRound)
+            }
+        }, 4000)
     }
 
     private fun populatePlayerHandContainer() {
@@ -190,23 +196,23 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                 } else if (currentRound.state == RoundState.PLAYING && currentTurn.player.uniqueID == uid) {
                     if (currentPack.mayPlayCard(player, card, currentRound.bet.trumpSuit, Suit.SPADE)) {
                         val builder = MaterialAlertDialogBuilder(this)
-                        builder.setMessage("Play "+card.getDisplayName()+"?")
-                            .setPositiveButton(R.string.dialog_yes_button, DialogInterface.OnClickListener { dialogInterface, i ->
-                                player.hand.remove(card)
-                                multiplayerCommunicator.playCard(currentTurn, card)
-                                dialogInterface.dismiss()
-                            })
-                            .setNegativeButton(R.string.dialog_no_button, DialogInterface.OnClickListener { dialogInterface, i ->
-                                dialogInterface.dismiss()
-                            })
-                            .show()
+                        builder.setMessage("Play " + card.getDisplayName() + "?")
+                                .setPositiveButton(R.string.dialog_yes_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                    player.hand.remove(card)
+                                    multiplayerCommunicator.playCard(currentTurn, card)
+                                    dialogInterface.dismiss()
+                                })
+                                .setNegativeButton(R.string.dialog_no_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                    dialogInterface.dismiss()
+                                })
+                                .show()
                     } else {
                         val builder = MaterialAlertDialogBuilder(this)
                         builder.setMessage("You cannot play this card.")
-                            .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
-                                dialogInterface.dismiss()
-                            })
-                            .show()
+                                .setPositiveButton(R.string.dialog_ok_button, DialogInterface.OnClickListener { dialogInterface, i ->
+                                    dialogInterface.dismiss()
+                                })
+                                .show()
                     }
                 }
                 populatePlayerHandContainer()
@@ -326,7 +332,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         }
     }
 
-    private fun determinePlayer(round:Round):Player {
+    private fun determinePlayer(round: Round):Player {
             for (player in round.players) {
                 if (player.uniqueID == uid) {
                     return player
@@ -335,7 +341,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         return Player()
     }
 
-    private fun determinePlayer(match:Match):Player {
+    private fun determinePlayer(match: Match):Player {
         for (team in match.teams.values) {
             for (player in team.players.values) {
                 if (player.uniqueID == uid) {
@@ -396,7 +402,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         try {
             nrPacks = Integer.parseInt(edtBetNrPacks.text.toString())
         } catch (e: NumberFormatException) {
-            Log.println(Log.WARN, "PlaceBet", "Unable to parse input for nrOfPacks ["+edtBetNrPacks.text.toString()+"] - defaulting to 6")
+            Log.println(Log.WARN, "PlaceBet", "Unable to parse input for nrOfPacks [" + edtBetNrPacks.text.toString() + "] - defaulting to 6")
         }
         return Bet(suit, player, nrPacks)
     }

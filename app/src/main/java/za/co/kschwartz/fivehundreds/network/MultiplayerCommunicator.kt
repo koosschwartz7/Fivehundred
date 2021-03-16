@@ -22,6 +22,8 @@ interface MultiplayerCommunicator {
 
     fun startRound(round: Round)
 
+    fun startNextPack(round: Round)
+
     fun placeBet(round: Round, bet: Bet)
 
     fun playCard(turn: Turn, card: Card)
