@@ -141,6 +141,10 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
             if (pack.turns[0].playedCard.suit == Suit.NULLSUIT) {
                 round.generateNextPackPlayOrder()
             }
+        } else {
+            for (i in 1..2) {
+                match.teams["Team $i"]!!.score += round.getTotalScoreForTeam(i)
+            }
         }
 
         val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)

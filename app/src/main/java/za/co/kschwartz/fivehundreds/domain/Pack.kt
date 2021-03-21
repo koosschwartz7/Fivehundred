@@ -78,18 +78,8 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
             } else {
                 packSuit = noTrumpsJokerSuit
             }
-        }
-
-        if (turns[0].playedCard.value == 11 && trumpSuit != Suit.JOKER) {
-            if (trumpSuit == Suit.SPADE && turns[0].playedCard.suit == Suit.CLUB) {
-                packSuit = trumpSuit
-            } else if (trumpSuit == Suit.CLUB && turns[0].playedCard.suit == Suit.SPADE) {
-                packSuit = trumpSuit
-            } else if (trumpSuit == Suit.DIAMOND && turns[0].playedCard.suit == Suit.HEART) {
-                packSuit = trumpSuit
-            } else if (trumpSuit == Suit.HEART && turns[0].playedCard.suit == Suit.DIAMOND) {
-                packSuit = trumpSuit
-            }
+        } else if (turns[0].playedCard.isTrump(trumpSuit)) {
+            packSuit = trumpSuit
         }
 
         if (packSuit == Suit.NULLSUIT) {
@@ -100,20 +90,20 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
             return true
         }
 
-        if (packSuit == card.suit) {
-            return true
-        }
 
-        if (packSuit != card.suit) {
-            for (c in player.hand) {
-                if (c.suit == packSuit && !c.isTrump(trumpSuit)) {
-                    return false
+        for (c in player.hand) {
+                if (packSuit != trumpSuit) {
+                    if (c.suit == packSuit && !c.isTrump(trumpSuit)) {
+                        return false
+                    }
+                } else {
+                    if (c.isTrump(trumpSuit)) {
+                        return false
+                    }
                 }
-            }
-            return true
         }
+        return true
 
-        return false
     }
 
 

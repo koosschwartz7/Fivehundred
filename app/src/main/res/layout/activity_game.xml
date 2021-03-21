@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="130dp">
+            android:paddingBottom="130dp"
+            android:id="@+id/llMainContainer">
 
             <LinearLayout
                 android:id="@+id/llBettingScreen"
