@@ -48,6 +48,9 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     var currentTurn = Turn()
     var currentPackIndex = 0
 
+    val roundBreakdownLayout = this.layoutInflater.inflate(R.layout.round_breakdown, null)
+    val breakDownPopup = PopupWindow(roundBreakdownLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+
     private var isFullscreen: Boolean = false
 
 
@@ -140,6 +143,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                 showRoundBreakDown()
             } else if (nextPlayablePackIndex != round.currentPackIndex) {
                 delayStartNextPack()
+            } else if (breakDownPopup.isShowing) {
+                breakDownPopup.dismiss()
             }
             //currentPack = round.packs[round.getNextPlayablePackIndex()]
             currentPack = round.getCurrentPack()
@@ -181,8 +186,6 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     private fun showRoundBreakDown() {
-        val roundBreakdownLayout = this.layoutInflater.inflate(R.layout.round_breakdown, null)
-        val breakDownPopup = PopupWindow(roundBreakdownLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         roundBreakdownLayout.txtPacksTakenTeam1.text = "Team 1: "+currentRound.getNrOfPacksTakenForTeam(1).toString()
         roundBreakdownLayout.txtPacksTakenTeam2.text = "Team 2: "+currentRound.getNrOfPacksTakenForTeam(2).toString()
@@ -202,12 +205,24 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         roundBreakdownLayout.txtMatchTotalTeam2.text = "Team 2: "+match.teams["Team 2"]!!.score
 
         roundBreakdownLayout.btnStartNextRound.visibility = View.GONE
-        if (isPlayerOne()) {
-            roundBreakdownLayout.btnStartNextRound.visibility = View.VISIBLE
-            roundBreakdownLayout.btnStartNextRound.setOnClickListener(View.OnClickListener {
-                multiplayerCommunicator.startNewRound()
-                breakDownPopup.dismiss()
-            })
+        roundBreakdownLayout.btnEndMatch.visibility = View.GONE
+        roundBreakdownLayout.txtWinningTeam.visibility = View.GONE
+        if (match.teams["Team 1"]!!.score >= 500) {
+            roundBreakdownLayout.btnEndMatch.visibility = View.VISIBLE
+            roundBreakdownLayout.txtWinningTeam.visibility = View.VISIBLE
+            roundBreakdownLayout.txtWinningTeam.text = "WINNING TEAM: TEAM 1!"
+        } else if (match.teams["Team 2"]!!.score >= 500) {
+            roundBreakdownLayout.btnEndMatch.visibility = View.VISIBLE
+            roundBreakdownLayout.txtWinningTeam.visibility = View.VISIBLE
+            roundBreakdownLayout.txtWinningTeam.text = "WINNING TEAM: TEAM 2!"
+        } else {
+            if (isPlayerOne()) {
+                roundBreakdownLayout.btnStartNextRound.visibility = View.VISIBLE
+                roundBreakdownLayout.btnStartNextRound.setOnClickListener(View.OnClickListener {
+                    multiplayerCommunicator.startNewRound()
+                    breakDownPopup.dismiss()
+                })
+            }
         }
 
         breakDownPopup.showAtLocation(llMainContainer, Gravity.CENTER, 0,0)
@@ -488,5 +503,12 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
     fun btnStartRoundClicked(view: View) {
         multiplayerCommunicator.startRound(currentRound)
+    }
+
+    fun btnExitClicked(view: View) {
+        multiplayerCommunicator.disconnect()
+        multiplayerCommunicator.endMatch(match)
+        Toast.makeText(this, "Thanks for playing!", Toast.LENGTH_SHORT).show()
+        finish()
     }
 }

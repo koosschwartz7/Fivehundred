@@ -151,4 +151,10 @@ class FirebaseCommunicator(override val responseReceiver: ResponseReceiver) : Mu
         fbMatchNode.setValue(match)
     }
 
+    override fun endMatch(match: Match) {
+        match.status = MatchState.FINISHED
+        val fbMatchNode = database.child("matches").child(match.uniqueMatchCode)
+        fbMatchNode.setValue(match)
+    }
+
 }

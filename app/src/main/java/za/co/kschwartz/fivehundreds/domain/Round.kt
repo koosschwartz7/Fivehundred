@@ -86,6 +86,8 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
 
         if (suit.trumpWeight <= bet.trumpSuit.trumpWeight) {
            minimumBet.nrPacks = bet.nrPacks+1
+        } else {
+            minimumBet.nrPacks = bet.nrPacks
         }
 
         return minimumBet

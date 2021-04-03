@@ -90,6 +90,9 @@ class Pack(player1: Player = Player(), player2: Player = Player(), player3: Play
             return true
         }
 
+        if (packSuit == card.suit && !card.isTrump(trumpSuit)) {
+            return true
+        }
 
         for (c in player.hand) {
                 if (packSuit != trumpSuit) {

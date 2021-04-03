@@ -28,4 +28,6 @@ interface MultiplayerCommunicator {
 
     fun playCard(turn: Turn, card: Card)
 
+    fun endMatch(match: Match)
+
 }
