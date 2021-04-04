@@ -29,10 +29,11 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
             for (i in 0..9) {
                 p.hand.add(i, deck.drawRandomCard())
             }
-            val sortedHand = p.hand.sortedWith(compareBy(Card::suit, Card::value))
-            p.hand = ArrayList(sortedHand)
+            p.sortPlayerHand(bet.trumpSuit)
         }
     }
+
+
 
     fun getNrOfPacksTakenForTeam(teamNr: Int):Int {
         var packsTaken: Int = 0
@@ -52,6 +53,9 @@ class Round(player1: Player = Player(), player2: Player = Player(), player3: Pla
         } else if (mayPlaceBet(newBet)) {
             bet = newBet
             betHistory.add(bet)
+            for (p in players) {
+                p.sortPlayerHand(bet.trumpSuit)
+            }
             incrementNextBettingPlayerIndex()
             return true
         }

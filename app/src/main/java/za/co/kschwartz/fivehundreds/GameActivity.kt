@@ -48,8 +48,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     var currentTurn = Turn()
     var currentPackIndex = 0
 
-    val roundBreakdownLayout = this.layoutInflater.inflate(R.layout.round_breakdown, null)
-    val breakDownPopup = PopupWindow(roundBreakdownLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+    var roundBreakdownLayout: View? = null
+    var breakDownPopup: PopupWindow? = null
 
     private var isFullscreen: Boolean = false
 
@@ -61,6 +61,9 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         setContentView(R.layout.activity_game)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.hide()
+
+        roundBreakdownLayout = this.layoutInflater.inflate(R.layout.round_breakdown, null);
+        breakDownPopup = PopupWindow(roundBreakdownLayout, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         uid = Settings.Secure.getString(applicationContext.contentResolver, Settings.Secure.ANDROID_ID)
         gameId = intent.getStringExtra("GAMEID").toString()
@@ -123,7 +126,6 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
     private fun updateUI() {
         val team1 = match.teams["Team 1"]
         val team2 = match.teams["Team 2"]
-        val player1 = team1?.players!!["Player 1"]
 
         var round: Round? = null
         try {
@@ -132,7 +134,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             println("Fresh game, starting new round.")
         }
 
-        txtTeam1Score.text = "Team 1:" + team1.score.toString()
+        txtTeam1Score.text = "Team 1:" + team1?.score.toString()
         txtTeam2Score.text = "Team 2:" + team2?.score.toString()
 
         if (round!=null) {
@@ -143,8 +145,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
                 showRoundBreakDown()
             } else if (nextPlayablePackIndex != round.currentPackIndex) {
                 delayStartNextPack()
-            } else if (breakDownPopup.isShowing) {
-                breakDownPopup.dismiss()
+            } else if (breakDownPopup!!.isShowing) {
+                breakDownPopup!!.dismiss()
             }
             //currentPack = round.packs[round.getNextPlayablePackIndex()]
             currentPack = round.getCurrentPack()
@@ -171,7 +173,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             } else if (round.state == RoundState.FINISHED) {
                 llBettingScreen.visibility = View.GONE
                 llGameScreen.visibility = View.GONE
-                if (team1.score < 500 && team2?.score!! < 500) {
+                if (team1!!.score < 500 && team2?.score!! < 500) {
                     if (isPlayerOne()) {
                         multiplayerCommunicator.startNewRound()
                     }
@@ -187,8 +189,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
     private fun showRoundBreakDown() {
 
-        roundBreakdownLayout.txtPacksTakenTeam1.text = "Team 1: "+currentRound.getNrOfPacksTakenForTeam(1).toString()
-        roundBreakdownLayout.txtPacksTakenTeam2.text = "Team 2: "+currentRound.getNrOfPacksTakenForTeam(2).toString()
+        roundBreakdownLayout!!.txtPacksTakenTeam1.text = "Team 1: "+currentRound.getNrOfPacksTakenForTeam(1).toString()
+        roundBreakdownLayout!!.txtPacksTakenTeam2.text = "Team 2: "+currentRound.getNrOfPacksTakenForTeam(2).toString()
         var scoreBreakdownText = "Team 1:\n"
         val scoreBreakdownTeam1 = currentRound.getScoreBreakdownForTeam(1)
         val scoreBreakdownTeam2 = currentRound.getScoreBreakdownForTeam(2)
@@ -199,33 +201,33 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         for (item in scoreBreakdownTeam2.keys) {
             scoreBreakdownText+= item+": "+scoreBreakdownTeam2[item]+"\n"
         }
-        roundBreakdownLayout.txtScoreBreakdown.text = scoreBreakdownText
+        roundBreakdownLayout!!.txtScoreBreakdown.text = scoreBreakdownText
 
-        roundBreakdownLayout.txtMatchTotalTeam1.text = "Team 1: "+match.teams["Team 1"]!!.score
-        roundBreakdownLayout.txtMatchTotalTeam2.text = "Team 2: "+match.teams["Team 2"]!!.score
+        roundBreakdownLayout!!.txtMatchTotalTeam1.text = "Team 1: "+match.teams["Team 1"]!!.score
+        roundBreakdownLayout!!.txtMatchTotalTeam2.text = "Team 2: "+match.teams["Team 2"]!!.score
 
-        roundBreakdownLayout.btnStartNextRound.visibility = View.GONE
-        roundBreakdownLayout.btnEndMatch.visibility = View.GONE
-        roundBreakdownLayout.txtWinningTeam.visibility = View.GONE
+        roundBreakdownLayout!!.btnStartNextRound.visibility = View.GONE
+        roundBreakdownLayout!!.btnEndMatch.visibility = View.GONE
+        roundBreakdownLayout!!.txtWinningTeam.visibility = View.GONE
         if (match.teams["Team 1"]!!.score >= 500) {
-            roundBreakdownLayout.btnEndMatch.visibility = View.VISIBLE
-            roundBreakdownLayout.txtWinningTeam.visibility = View.VISIBLE
-            roundBreakdownLayout.txtWinningTeam.text = "WINNING TEAM: TEAM 1!"
+            roundBreakdownLayout!!.btnEndMatch.visibility = View.VISIBLE
+            roundBreakdownLayout!!.txtWinningTeam.visibility = View.VISIBLE
+            roundBreakdownLayout!!.txtWinningTeam.text = "WINNING TEAM: TEAM 1!"
         } else if (match.teams["Team 2"]!!.score >= 500) {
-            roundBreakdownLayout.btnEndMatch.visibility = View.VISIBLE
-            roundBreakdownLayout.txtWinningTeam.visibility = View.VISIBLE
-            roundBreakdownLayout.txtWinningTeam.text = "WINNING TEAM: TEAM 2!"
+            roundBreakdownLayout!!.btnEndMatch.visibility = View.VISIBLE
+            roundBreakdownLayout!!.txtWinningTeam.visibility = View.VISIBLE
+            roundBreakdownLayout!!.txtWinningTeam.text = "WINNING TEAM: TEAM 2!"
         } else {
             if (isPlayerOne()) {
-                roundBreakdownLayout.btnStartNextRound.visibility = View.VISIBLE
-                roundBreakdownLayout.btnStartNextRound.setOnClickListener(View.OnClickListener {
+                roundBreakdownLayout!!.btnStartNextRound.visibility = View.VISIBLE
+                roundBreakdownLayout!!.btnStartNextRound.setOnClickListener(View.OnClickListener {
                     multiplayerCommunicator.startNewRound()
-                    breakDownPopup.dismiss()
+                    breakDownPopup!!.dismiss()
                 })
             }
         }
 
-        breakDownPopup.showAtLocation(llMainContainer, Gravity.CENTER, 0,0)
+        breakDownPopup!!.showAtLocation(llMainContainer, Gravity.CENTER, 0,0)
     }
 
     private fun delayStartNextPack() {
@@ -330,6 +332,7 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
             cardLayout.setOnClickListener(View.OnClickListener {
                 player.hand.add(card)
                 round.deck!!.cards.remove(card)
+                player.sortPlayerHand(currentRound.bet.trumpSuit)
                 checkRoundStartable()
                 populateKittyContainer(round)
                 populatePlayerHandContainer()
