@@ -1,5 +1,7 @@
 package za.co.kschwartz.fivehundreds.domain
 
+import za.co.kschwartz.fivehundreds.R
+
 class Team(teamNr: Int = 1) {
 
     var players = mutableMapOf<String,Player>()
@@ -13,6 +15,13 @@ class Team(teamNr: Int = 1) {
             return true
         }
         return false
+    }
+
+    fun getTeamColorID(): Int {
+        if (teamNr == 2) {
+            return R.color.teamTwoColor
+        }
+        return  R.color.teamOneColor
     }
 
 }

@@ -9,10 +9,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -365,31 +362,48 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
         txtTeam1Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(1)
         txtTeam2Packs.text = "Packs:" + round.getNrOfPacksTakenForTeam(2)
 
-        setPlayerLabelValues(currentPack.turns[0].player, txtPlay1)
-        setPlayerLabelValues(currentPack.turns[1].player, txtPlay2)
-        setPlayerLabelValues(currentPack.turns[2].player, txtPlay4)
-        setPlayerLabelValues(currentPack.turns[3].player, txtPlay3)
+        val team1 = match.teams["Team 1"]!!
+        val team2 = match.teams["Team 2"]!!
+        val player1 = team1.players["Player 1"]!!
+        val player2 = team2.players["Player 1"]!!
+        val player3 = team1.players["Player 2"]!!
+        val player4 = team2.players["Player 2"]!!
+
+        setPlayerLabelValues(player1, txtPlay1)
+        setPlayerLabelValues(player2, txtPlay2)
+        setPlayerLabelValues(player3, txtPlay3)
+        setPlayerLabelValues(player4, txtPlay4)
 
         if (round.bet.trumpSuit == Suit.NULLSUIT) {
-            txtBet.text = "Current Bet:"
+            txtBet.text = "Bet:"
         } else {
-            txtBet.text = "Current Bet:" + round.bet.nrPacks + " of " + round.bet.getTrumpTitle()
+            txtBet.text = "Bet:" + round.bet.nrPacks + " of " + round.bet.getTrumpTitle()
         }
 
-        imgPlay1.setImageResource(currentPack.turns[0].playedCard.imgResId)
-        imgPlay2.setImageResource(currentPack.turns[1].playedCard.imgResId)
-        imgPlay4.setImageResource(currentPack.turns[2].playedCard.imgResId)
-        imgPlay3.setImageResource(currentPack.turns[3].playedCard.imgResId)
-
+        setPlayedCard(imgPlay1, player1)
+        setPlayedCard(imgPlay2, player2)
+        setPlayedCard(imgPlay3, player3)
+        setPlayedCard(imgPlay4, player4)
 
     }
 
     private fun setPlayerLabelValues(player: Player, textView: TextView) {
         textView.text = player.name
         if (currentTurn.player.uniqueID == player.uniqueID) {
-            textView.setTextColor(resources.getColor(R.color.brightGreen))
+            textView.setTextColor(
+                resources.getColor(match.teams["Team "+player.team]!!.getTeamColorID())
+            )
         } else {
             textView.setTextColor(resources.getColor(R.color.offWhite))
+        }
+    }
+
+    private fun setPlayedCard(imgView: ImageView, player: Player) {
+        for (turn in currentPack.turns) {
+            if (player.uniqueID == turn.player.uniqueID) {
+                imgView.setImageResource(turn.playedCard.imgResId)
+                break
+            }
         }
     }
 
