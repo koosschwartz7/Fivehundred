@@ -6,6 +6,10 @@
     <color name="offWhite">#F1F1F1</color>
     <color name="brightGreen">#64F702</color>
     <color name="darkGrey">#494743</color>
+    <color name="teamOneColor">#43a047</color>
+    <color name="teamTwoColor">#FFBF00</color>
+    <color name="teamOneTransparent">#6643a047</color>
+    <color name="teamTwoTransparent">#66FFBF00</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

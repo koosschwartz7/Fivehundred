@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txtBettingScreenTitle"
@@ -148,45 +148,45 @@
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
                             android:checked="true"
+                            android:onClick="btnSuitSelectClicked"
                             android:text="Spades"
-                            android:textColor="@color/offWhite"
-                            android:onClick="btnSuitSelectClicked"/>
+                            android:textColor="@color/offWhite" />
 
                         <RadioButton
                             android:id="@+id/btnClubs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked"
                             android:text="Clubs"
-                            android:textColor="@color/offWhite"
-                            android:onClick="btnSuitSelectClicked" />
+                            android:textColor="@color/offWhite" />
 
                         <RadioButton
                             android:id="@+id/btnDiamonds"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked"
                             android:text="Diamonds"
-                            android:textColor="@color/offWhite"
-                            android:onClick="btnSuitSelectClicked" />
+                            android:textColor="@color/offWhite" />
 
                         <RadioButton
                             android:id="@+id/btnHearts"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked"
                             android:text="Hearts"
-                            android:textColor="@color/offWhite"
-                            android:onClick="btnSuitSelectClicked" />
+                            android:textColor="@color/offWhite" />
 
                         <RadioButton
                             android:id="@+id/btnNoTrumps"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:buttonTint="@color/offWhite"
+                            android:onClick="btnSuitSelectClicked"
                             android:text="No Trumps"
-                            android:textColor="@color/offWhite"
-                            android:onClick="btnSuitSelectClicked" />
+                            android:textColor="@color/offWhite" />
                     </RadioGroup>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -321,7 +321,7 @@
                 android:layout_marginBottom="130sp"
                 android:orientation="vertical"
                 android:padding="5sp"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -337,7 +337,7 @@
                         android:layout_margin="5sp"
                         android:layout_weight="1"
                         android:text="Team 1: 0"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/teamOneColor" />
 
                     <TextView
                         android:id="@+id/txtTeam2Score"
@@ -346,7 +346,7 @@
                         android:layout_margin="5sp"
                         android:layout_weight="1"
                         android:text="Team 2: 0"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/teamTwoColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -372,7 +372,7 @@
                         android:layout_margin="5sp"
                         android:layout_weight="1"
                         android:text="Packs: 0"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/teamTwoColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -414,14 +414,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@color/teamOneTransparent"
+                            android:orientation="vertical"
+                            android:padding="4dp">
 
                             <TextView
                                 android:id="@+id/txtPlay1"
@@ -429,6 +430,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5sp"
                                 android:layout_weight="1"
+                                android:background="@color/black_overlay"
                                 android:text="Player 1"
                                 android:textAlignment="center"
                                 android:textColor="@color/offWhite" />
@@ -448,7 +450,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@color/teamTwoTransparent"
+                            android:orientation="vertical"
+                            android:padding="4dp">
 
                             <TextView
                                 android:id="@+id/txtPlay2"
@@ -456,6 +460,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5sp"
                                 android:layout_weight="1"
+                                android:background="@color/black_overlay"
                                 android:text="Player 2"
                                 android:textAlignment="center"
                                 android:textColor="@color/offWhite" />
@@ -476,27 +481,29 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="5sp"
                         android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@color/teamTwoTransparent"
+                            android:orientation="vertical"
+                            android:padding="4dp">
 
                             <TextView
-                                android:id="@+id/txtPlay3"
+                                android:id="@+id/txtPlay4"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5sp"
                                 android:layout_weight="1"
-                                android:text="Player 3"
+                                android:background="@color/black_overlay"
+                                android:text="Player 4"
                                 android:textAlignment="center"
                                 android:textColor="@color/offWhite" />
 
                             <ImageView
-                                android:id="@+id/imgPlay3"
+                                android:id="@+id/imgPlay4"
                                 android:layout_width="100dp"
                                 android:layout_height="150dp"
                                 android:layout_gravity="center"
@@ -510,20 +517,23 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:background="@color/teamOneTransparent"
+                            android:orientation="vertical"
+                            android:padding="4dp">
 
                             <TextView
-                                android:id="@+id/txtPlay4"
+                                android:id="@+id/txtPlay3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="5sp"
                                 android:layout_weight="1"
-                                android:text="Player 4"
+                                android:background="@color/black_overlay"
+                                android:text="Player 3"
                                 android:textAlignment="center"
                                 android:textColor="@color/offWhite" />
 
                             <ImageView
-                                android:id="@+id/imgPlay4"
+                                android:id="@+id/imgPlay3"
                                 android:layout_width="100dp"
                                 android:layout_height="150dp"
                                 android:layout_gravity="center"

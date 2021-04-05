@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_game.*
 import kotlinx.android.synthetic.main.bet_history_instance.view.*
 import kotlinx.android.synthetic.main.player_card.view.*
-import kotlinx.android.synthetic.main.round_breakdown.*
 import kotlinx.android.synthetic.main.round_breakdown.view.*
 import za.co.kschwartz.fivehundreds.domain.*
 import za.co.kschwartz.fivehundreds.network.FirebaseCommunicator
@@ -368,8 +367,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
         setPlayerLabelValues(currentPack.turns[0].player, txtPlay1)
         setPlayerLabelValues(currentPack.turns[1].player, txtPlay2)
-        setPlayerLabelValues(currentPack.turns[2].player, txtPlay3)
-        setPlayerLabelValues(currentPack.turns[3].player, txtPlay4)
+        setPlayerLabelValues(currentPack.turns[2].player, txtPlay4)
+        setPlayerLabelValues(currentPack.turns[3].player, txtPlay3)
 
         if (round.bet.trumpSuit == Suit.NULLSUIT) {
             txtBet.text = "Current Bet:"
@@ -379,8 +378,8 @@ class GameActivity : AppCompatActivity(), ResponseReceiver {
 
         imgPlay1.setImageResource(currentPack.turns[0].playedCard.imgResId)
         imgPlay2.setImageResource(currentPack.turns[1].playedCard.imgResId)
-        imgPlay3.setImageResource(currentPack.turns[2].playedCard.imgResId)
-        imgPlay4.setImageResource(currentPack.turns[3].playedCard.imgResId)
+        imgPlay4.setImageResource(currentPack.turns[2].playedCard.imgResId)
+        imgPlay3.setImageResource(currentPack.turns[3].playedCard.imgResId)
 
 
     }
