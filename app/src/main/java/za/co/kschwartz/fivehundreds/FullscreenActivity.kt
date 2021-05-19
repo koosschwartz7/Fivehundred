@@ -207,7 +207,6 @@ class FullscreenActivity : AppCompatActivity(), ResponseReceiver {
     }
 
     override fun joinMatchSuccess(match: Match) {
-        //TODO: Rejoin functionality
         Toast.makeText(applicationContext, "Joining match "+match.uniqueMatchCode+"...",Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LobbyActivity::class.java).apply {
             putExtra("GAMEID", match.uniqueMatchCode)
